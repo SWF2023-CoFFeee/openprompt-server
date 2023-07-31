@@ -70,6 +70,6 @@ public class RSAUtil {
     }
 
     public static String getBase64PublicKey(PublicKey publicKey){
-        Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
     }
 }
