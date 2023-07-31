@@ -42,9 +42,9 @@ public class ProductService {
 
     public Long buyCopyright(Long product_id, String username) {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
-        Copyright copyright = product.getCopyright_id();
+        Copyright copyright = product.getCopyright();
 
-        List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyright_id());
+        List<Product> productList = productRepository.findListByCopyright_Id(copyright.getCopyright_id());
         for(Product p : productList){
             p.cancelSellingProduct();
             productRepository.save(product);
@@ -65,6 +65,6 @@ public class ProductService {
     public void buyTicket(Long product_id, String username) {
         User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
-        ownTicketRepository.save(new OwnTicket(buyer, product.getCopyright_id()));
+        ownTicketRepository.save(new OwnTicket(buyer, product.getCopyright()));
     }
 }

@@ -28,7 +28,7 @@ public class Product extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "copyright_id")
-    private Copyright copyright_id;
+    private Copyright copyright;
 
     private String title;
     private String description;
@@ -49,7 +49,7 @@ public class Product extends BaseEntity {
                 .thumbnail(e.getThumbnail())
                 .product_title(e.getTitle())
                 .like(e.getLikes())
-                .username(e.copyright_id.getUser().getUsername())
+                .username(e.copyright.getUser().getUsername())
                 .price(e.getPrice())
                 .AI_type(e.getAI_type().getValue())
                 .build();
@@ -59,7 +59,7 @@ public class Product extends BaseEntity {
                 .product_type(e.getProduct_type().getValue())
                 .description(e.getDescription())
                 .price(e.getPrice())
-                .username(e.getCopyright_id().getUser().getUsername())
+                .username(e.getCopyright().getUser().getUsername())
                 .title(e.getTitle())
                 .thumbnail(e.getThumbnail())
                 .AI_type(e.getAI_type().getValue())

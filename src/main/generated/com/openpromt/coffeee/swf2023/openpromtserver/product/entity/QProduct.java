@@ -28,7 +28,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType> AI_type = createEnum("AI_type", com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType.class);
 
-    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyright_id;
+    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyright;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CRE_DTTM = _super.CRE_DTTM;
@@ -76,7 +76,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.copyright_id = inits.isInitialized("copyright_id") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyright_id"), inits.get("copyright_id")) : null;
+        this.copyright = inits.isInitialized("copyright") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyright"), inits.get("copyright")) : null;
     }
 
 }
