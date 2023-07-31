@@ -42,18 +42,18 @@ public class SecurityConfig {
                     .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/api/v2/user/**")
-                .permitAll()
-                .antMatchers("/api/v2/**")
-                .hasRole("USER")
-                .anyRequest()
-                .denyAll()
+                        .authorizeRequests()
+                        .antMatchers("/api/v2/user/**")
+                    .permitAll()
+                        .antMatchers("/api/v2/**")
+                    .hasRole("USER")
+                        .anyRequest()
+                    .denyAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                    .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                    .exceptionHandling()
+                    .accessDeniedHandler(accessDeniedHandler)
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         return httpSecurity.build();
     }

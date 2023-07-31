@@ -21,6 +21,7 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -53,11 +54,12 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
     // swagger
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
+    // IPFS
+    implementation 'com.github.ipfs:java-ipfs-http-client:1.4.4'
 }
 
 tasks.named('test') {
