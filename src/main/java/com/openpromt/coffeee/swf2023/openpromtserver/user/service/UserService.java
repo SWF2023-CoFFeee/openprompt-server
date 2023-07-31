@@ -13,6 +13,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 @Slf4j
@@ -35,10 +37,13 @@ public class UserService {
         return user.getUser_id();
     }
 
-    public LoginResponseDto login(LoginRequestDto requestDto){
+    public LoginResponseDto login(LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
         User user = userRepository.findByUsername(requestDto.getUsername()).orElseThrow(() -> new BadCredentialsException("잘못된 계정정보입니다."));
         if(!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword()))
             throw new BadCredentialsException("잘못된 계정정보입니다.");
+
+        Cookie cookie = new Cookie("access_token", jwtProvider.createToken(user.getUsername(), user.getRole()));
+        httpServletResponse.addCookie(cookie);
 
         return LoginResponseDto.builder()
                 .user_id(user.getUser_id())
