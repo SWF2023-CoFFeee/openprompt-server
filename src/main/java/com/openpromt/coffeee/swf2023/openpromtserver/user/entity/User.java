@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.user.entity;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseUserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.persistence.Id;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

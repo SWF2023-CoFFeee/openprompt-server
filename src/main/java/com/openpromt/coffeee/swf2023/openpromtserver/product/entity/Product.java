@@ -3,6 +3,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.product.entity;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductTypeConverter;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

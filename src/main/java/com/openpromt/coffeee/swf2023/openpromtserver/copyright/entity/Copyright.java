@@ -1,6 +1,7 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Copyright {
+public class Copyright extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long copyright_id;
