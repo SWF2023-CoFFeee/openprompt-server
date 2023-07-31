@@ -69,16 +69,17 @@ public class JwtProvider {
 
     // Authorization Header를 통해 인증 진행
     public String resolveToken(HttpServletRequest request){
+
         return request.getHeader("Authorization");
     }
 
     // 토큰 검증
     public boolean validateToken(String token){
         try {
-            if(!token.substring(0, "BEARER ".length()).equalsIgnoreCase("BEARER "))
-                return false;
-            else
-                token = token.split(" ")[1].trim();
+//            if(!token.substring(0, "BEARER ".length()).equalsIgnoreCase("BEARER "))
+//                return false;
+//            else
+//                token = token.split(" ")[1].trim();
 
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 
