@@ -27,6 +27,8 @@ import java.io.IOException;
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+    private final AccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -50,24 +52,8 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .accessDeniedHandler(new AccessDeniedHandler() {
-                    @Override
-                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-                        response.setStatus(403);
-                        response.setCharacterEncoding("utf-8");
-                        response.setContentType("text/html; charset=UTF-8");
-                        response.getWriter().write("권한이 없는 사용자입니다.");
-                    }
-                })
-                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                    @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                        response.setStatus(401);
-                        response.setCharacterEncoding("utf-8");
-                        response.setContentType("text/html; charset=UTF-8");
-                        response.getWriter().write("인증되지 않은 사용자입니다.");
-                    }
-                });
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         return httpSecurity.build();
     }
