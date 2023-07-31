@@ -21,10 +21,10 @@ public class CopyrightApiController {
     private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
     private final CopyrightService copyrightService;
 
-    public RegisterCopyrightResponse registerCopyright(@RequestBody RegisterCopyrightRequest request){
-        Copyright newCopyright = new Copyright();
-
-    }
+//    public RegisterCopyrightResponse registerCopyright(@RequestBody RegisterCopyrightRequest request){
+//        Copyright newCopyright = new Copyright();
+//
+//    }
 
 
 }

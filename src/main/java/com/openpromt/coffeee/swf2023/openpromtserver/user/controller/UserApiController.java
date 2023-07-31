@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.user.controller;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.auth.PrincipalDetails;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.JoinRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
@@ -8,11 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 @Slf4j

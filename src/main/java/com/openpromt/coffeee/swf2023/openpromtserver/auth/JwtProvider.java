@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtProvider {
@@ -36,8 +38,8 @@ public class JwtProvider {
     }
 
     // 토큰생성
-    public String createToken(String account, Role role){
-        Claims claims = Jwts.claims().setSubject(account);
+    public String createToken(String username, Role role){
+        Claims claims = Jwts.claims().setSubject(username);
         claims.put("role", role);
         Date now = new Date();
         return Jwts.builder()
