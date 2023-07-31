@@ -45,7 +45,6 @@ public class ProductService {
     public Long buyCopyright(Long product_id, String username) {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
         Copyright copyright = product.getCopyrightId();
-
         List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyrightId());
         for(Product p : productList){
             p.cancelSellingProduct();

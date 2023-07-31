@@ -26,8 +26,8 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "copyrightId")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Copyright copyrightId;
 
     private String title;
