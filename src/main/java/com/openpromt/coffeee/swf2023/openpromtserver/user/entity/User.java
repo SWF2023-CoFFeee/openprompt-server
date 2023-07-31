@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.user.entity;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseUserEntity;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,6 @@ public class User extends BaseUserEntity {
 
     private String username;
     private String password;
-    private String product_list;
 
     @Enumerated(EnumType.STRING)
     private Role role;

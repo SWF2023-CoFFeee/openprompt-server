@@ -45,4 +45,8 @@ public class Copyright extends BaseEntity {
 
         return new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
     }
+
+    public void sellCopyright(User buyer) {
+        this.user = buyer;
+    }
 }
