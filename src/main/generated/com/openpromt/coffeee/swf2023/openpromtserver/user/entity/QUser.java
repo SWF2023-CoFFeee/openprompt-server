@@ -24,8 +24,6 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CRE_DTTM = _super.CRE_DTTM;
 
-    public final StringPath nickname = createString("nickname");
-
     public final StringPath password = createString("password");
 
     public final StringPath product_list = createString("product_list");
