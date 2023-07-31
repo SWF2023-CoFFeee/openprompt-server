@@ -19,6 +19,7 @@ import java.security.PublicKey;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Copyright extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long copyright_id;
@@ -26,6 +27,7 @@ public class Copyright extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
     private String priv_key;
     private String pub_key;
 
