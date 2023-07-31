@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+
 @Slf4j
 @RequestMapping("/api/v2/copyright")
 @RequiredArgsConstructor
@@ -20,11 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CopyrightApiController {
     private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
     private final CopyrightService copyrightService;
-
-//    public RegisterCopyrightResponse registerCopyright(@RequestBody RegisterCopyrightRequest request){
-//        Copyright newCopyright = new Copyright();
-//
-//    }
+    public RegisterCopyrightResponse registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
+        copyrightService.registCopyright(request,principal.getName());
+    }
 
 
 }

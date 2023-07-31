@@ -28,19 +28,21 @@ public class Copyright extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private String copyright_title;
     private String priv_key;
     private String pub_key;
 
-    public Copyright(String priv_key, String pub_key){
+    public Copyright(String copyright_title, String priv_key, String pub_key){
         this.priv_key=priv_key;
         this.pub_key=pub_key;
+        this.copyright_title = copyright_title;
     }
 
-    public static Copyright getCopyrightByRequest(RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
+    public static Copyright getCopyrightByRequest(RegisterCopyrightRequest request,User user) throws NoSuchAlgorithmException {
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
         PublicKey publicKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
 
-        return new Copyright(RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
+        return new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
     }
 }
