@@ -26,14 +26,12 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
-    public final StringPath product_list = createString("product_list");
-
     public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role> role = createEnum("role", com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> UPD_DTTM = _super.UPD_DTTM;
 
-    public final NumberPath<Long> user_id = createNumber("user_id", Long.class);
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public final StringPath username = createString("username");
 

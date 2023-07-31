@@ -39,7 +39,7 @@ public class CopyrightService {
 
         Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
 
-        Long copyright_id = copyrightRepository.save(newCopyright).getCopyright_id();
+        Long copyright_id = copyrightRepository.save(newCopyright).getCopyrightId();
 
         return null;
     }

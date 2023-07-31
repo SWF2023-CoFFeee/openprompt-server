@@ -30,9 +30,11 @@ public class ProductService {
     private final CopyrightRepository copyrightRepository;
     private final UserRepository userRepository;
     private final OwnTicketRepository ownTicketRepository;
+
     public List<GetProductListResponse> getProductListByProductType(String product_type) {
         return productRepository.findAllByProductType(product_type).stream().map(Product::productToListResponse).collect(Collectors.toList());
     }
+
 
     public GetProductDetailResponse getProductDetail(Long product_id) {
         Product product =productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
@@ -42,9 +44,9 @@ public class ProductService {
 
     public Long buyCopyright(Long product_id, String username) {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
-        Copyright copyright = product.getCopyright_id();
+        Copyright copyright = product.getCopyrightId();
 
-        List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyright_id());
+        List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyrightId());
         for(Product p : productList){
             p.cancelSellingProduct();
             productRepository.save(product);
@@ -52,19 +54,20 @@ public class ProductService {
 
         User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
         copyright.sellCopyright(buyer);
-        Long copyright_id =copyrightRepository.save(copyright).getCopyright_id();
+        Long copyright_id =copyrightRepository.save(copyright).getCopyrightId();
 
         /**
          * IPFS 갱신 코드 넣어주세요.
          */
 
         return copyright_id;
+
     }
 
 
     public void buyTicket(Long product_id, String username) {
         User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
-        ownTicketRepository.save(new OwnTicket(buyer, product.getCopyright_id()));
+        ownTicketRepository.save(new OwnTicket(buyer, product.getCopyrightId()));
     }
 }

@@ -22,19 +22,19 @@ public class Copyright extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long copyright_id;
+    private Long copyrightId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     private User user;
 
     private String copyright_title;
-    private String priv_key;
-    private String pub_key;
+    private String privKey;
+    private String pubKey;
 
     public Copyright(String copyright_title, String priv_key, String pub_key){
-        this.priv_key=priv_key;
-        this.pub_key=pub_key;
+        this.privKey=priv_key;
+        this.pubKey=pub_key;
         this.copyright_title = copyright_title;
     }
 

@@ -24,11 +24,11 @@ public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
+    private Long productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "copyright_id")
-    private Copyright copyright_id;
+    @JoinColumn(name = "copyrightId")
+    private Copyright copyrightId;
 
     private String title;
     private String description;
@@ -37,10 +37,10 @@ public class Product extends BaseEntity {
     private Integer likes;
     private Integer price;
     @Enumerated(EnumType.STRING)
-    private ProductType product_type;
+    private ProductType productType;
 
     @Enumerated(EnumType.STRING)
-    private AIType AI_type;
+    private AIType AIType;
 
     private boolean status;
 
@@ -49,20 +49,20 @@ public class Product extends BaseEntity {
                 .thumbnail(e.getThumbnail())
                 .product_title(e.getTitle())
                 .like(e.getLikes())
-                .username(e.copyright_id.getUser().getUsername())
+                .username(e.copyrightId.getUser().getUsername())
                 .price(e.getPrice())
-                .AI_type(e.getAI_type().getValue())
+                .AI_type(e.getAIType().getValue())
                 .build();
     }
     public static GetProductDetailResponse productToDetailResponse(Product e){
         return GetProductDetailResponse.builder()
-                .product_type(e.getProduct_type().getValue())
+                .product_type(e.getProductType().getValue())
                 .description(e.getDescription())
                 .price(e.getPrice())
-                .username(e.getCopyright_id().getUser().getUsername())
+                .username(e.getCopyrightId().getUser().getUsername())
                 .title(e.getTitle())
                 .thumbnail(e.getThumbnail())
-                .AI_type(e.getAI_type().getValue())
+                .AI_type(e.getAIType().getValue())
                 .build();
     }
 

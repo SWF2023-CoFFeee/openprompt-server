@@ -34,7 +34,7 @@ public class UserService {
         requestDto.setRole(Role.USER);
         User user = userRepository.save(requestDto.toEntity());
 
-        return user.getUser_id();
+        return user.getUserId();
     }
 
     public LoginResponseDto login(LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
@@ -46,7 +46,7 @@ public class UserService {
         httpServletResponse.addCookie(cookie);
 
         return LoginResponseDto.builder()
-                .user_id(user.getUser_id())
+                .user_id(user.getUserId())
                 .username(user.getUsername())
                 .role(user.getRole())
                 .token(jwtProvider.createToken(user.getUsername(), user.getRole()))

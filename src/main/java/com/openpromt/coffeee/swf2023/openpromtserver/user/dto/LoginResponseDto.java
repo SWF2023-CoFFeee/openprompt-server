@@ -20,7 +20,7 @@ public class LoginResponseDto {
 
     public LoginResponseDto(User user){
         this.username = user.getUsername();
-        this.user_id = user.getUser_id();
+        this.user_id = user.getUserId();
         this.role = user.getRole();
     }
 }

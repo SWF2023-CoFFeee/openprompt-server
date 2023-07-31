@@ -22,15 +22,15 @@ public class OwnTicket {
     private Long own_id;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user_id;
+    @JoinColumn(name="userId")
+    private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="copyright_id")
-    private Copyright copyright_id;
+    @JoinColumn(name="copyrightId")
+    private Copyright copyrightId;
 
     public OwnTicket(User buyer, Copyright copyright_id) {
-        this.user_id = buyer;
-        this.copyright_id = copyright_id;
+        this.userId = buyer;
+        this.copyrightId = copyright_id;
     }
 }

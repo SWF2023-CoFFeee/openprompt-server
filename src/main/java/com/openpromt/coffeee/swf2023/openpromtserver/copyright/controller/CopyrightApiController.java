@@ -25,6 +25,7 @@ public class CopyrightApiController {
     private final CopyrightService copyrightService;
     public RegisterCopyrightResponse registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
         copyrightService.registCopyright(request,principal.getName());
+        return null;
     }
 
 
