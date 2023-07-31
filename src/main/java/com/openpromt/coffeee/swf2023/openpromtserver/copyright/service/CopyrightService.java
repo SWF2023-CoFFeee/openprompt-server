@@ -2,6 +2,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.copyright.service;
 
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.CopyrightRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
@@ -14,6 +15,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,9 +24,26 @@ public class CopyrightService {
     private final UserRepository userRepository;
     private final CopyrightRepository copyrightRepository;
 
-    public void registerCopyright(RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
-        Optional<User> user;
-        Copyright newCopyright = Copyright.getCopyrightByRequest(request);
+    /**
+     *
+     * @param request
+     * @param username
+     * @return
+     * @throws NoSuchAlgorithmException
+     *
+     * Encrypt 이후, DB에 저장시키고 Copyright_id값 가져오는 것까지 작성해놓았습니다.
+     * IPFS에 값을 저장하고, RegisterCopyrightReponse에 맞춰 값을 리턴시켜주세요.
+     */
+    public RegisterCopyrightResponse registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException {
+        Optional<User> user = userRepository.findByUsername(username);
 
+        Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
+
+        Long copyright_id = copyrightRepository.save(newCopyright).getCopyright_id();
+
+        return null;
     }
+
+
+
 }
