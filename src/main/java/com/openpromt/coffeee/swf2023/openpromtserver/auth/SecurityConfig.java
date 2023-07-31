@@ -43,7 +43,7 @@ public class SecurityConfig {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                         .authorizeRequests()
-                        .antMatchers("/api/v2/user/**")
+                        .antMatchers("/api/v2/user/**", "/api/v2/ipfs/**")
                     .permitAll()
                         .antMatchers("/api/v2/**")
                     .hasRole("USER")

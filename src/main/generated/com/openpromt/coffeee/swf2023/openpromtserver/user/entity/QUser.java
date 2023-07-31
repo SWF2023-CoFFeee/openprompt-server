@@ -26,8 +26,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath password = createString("password");
 
-    public final StringPath product_list = createString("product_list");
-
     public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role> role = createEnum("role", com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role.class);
 
     //inherited

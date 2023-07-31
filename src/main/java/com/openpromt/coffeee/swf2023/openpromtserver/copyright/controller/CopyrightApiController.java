@@ -21,11 +21,11 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @RestController
 public class CopyrightApiController {
-    private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
-    private final CopyrightService copyrightService;
-    public RegisterCopyrightResponse registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
-        copyrightService.registCopyright(request,principal.getName());
-    }
+//    private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
+//    private final CopyrightService copyrightService;
+//    public RegisterCopyrightResponse registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException {
+//        copyrightService.registCopyright(request,principal.getName());
+//    }
 
 
 }

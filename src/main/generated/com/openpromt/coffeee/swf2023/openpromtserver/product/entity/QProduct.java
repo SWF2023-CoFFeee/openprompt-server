@@ -40,6 +40,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> likes = createNumber("likes", Integer.class);
 
+    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
     public final NumberPath<Long> product_id = createNumber("product_id", Long.class);
 
     public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType> product_type = createEnum("product_type", com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType.class);

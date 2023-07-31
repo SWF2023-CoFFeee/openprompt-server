@@ -26,6 +26,8 @@ public class QCopyright extends EntityPathBase<Copyright> {
 
     public final NumberPath<Long> copyright_id = createNumber("copyright_id", Long.class);
 
+    public final StringPath copyright_title = createString("copyright_title");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CRE_DTTM = _super.CRE_DTTM;
 
