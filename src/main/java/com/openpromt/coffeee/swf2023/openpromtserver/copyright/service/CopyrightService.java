@@ -5,6 +5,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyr
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.CopyrightRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
