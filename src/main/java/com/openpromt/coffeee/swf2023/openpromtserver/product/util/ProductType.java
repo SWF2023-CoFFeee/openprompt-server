@@ -7,8 +7,8 @@ import java.util.Arrays;
 @Getter
 public enum ProductType {
 
-    COPYRIGHT("저작권"),
-    TICKET("사용권");
+    COPYRIGHT("Copyright"),
+    TICKET("ticket");
     private String value;
 
     ProductType(String value){

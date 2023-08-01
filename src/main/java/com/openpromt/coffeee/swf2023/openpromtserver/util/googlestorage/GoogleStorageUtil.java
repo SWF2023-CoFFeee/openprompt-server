@@ -19,12 +19,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GoogleStorageUtil {
     @Value("${spring.cloud.gcp.storage.bucket}")
-    private static String bucketName;
+    private String bucketName;
 
     private static final String baseUrl = "https://storage.googleapis.com/coffeee/";
     private static Storage storage;
 
-    public static String getGoogleStorageUrl(MultipartFile file) throws IOException {
+    public String getGoogleStorageUrl(MultipartFile file) throws IOException {
         String uuid = UUID.randomUUID().toString(); // GCS에 저장될 파일 이름
         String type = file.getContentType(); // 파일 형식
         BlobInfo blobInfo = storage.create(

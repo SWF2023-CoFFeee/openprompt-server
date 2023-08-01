@@ -11,11 +11,13 @@ import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.repository.ProductRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.googlestorage.GoogleStorageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -33,7 +35,7 @@ public class ProductService {
     private final UserRepository userRepository;
     private final OwnTicketRepository ownTicketRepository;
 
-
+    private final GoogleStorageUtil googleStorageUtil;
 
     public List<GetProductListResponse> getProductListByProductType(String product_type) {
         return productRepository.findAllByProductType(product_type).stream().map(Product::productToListResponse).collect(Collectors.toList());
@@ -74,9 +76,12 @@ public class ProductService {
         ownTicketRepository.save(new OwnTicket(buyer, product.getCopyrightId()));
     }
 
-    public void registerProduct(RegistProductRequest request) throws IOException {
+    public void registerProduct(RegistProductRequest request, MultipartFile file) throws IOException {
         Copyright copyright = copyrightRepository.findById(request.getCopyright_id()).orElseThrow(NoSuchElementException::new);
         Product newProduct = Product.registProductRequestToProduct(request);
+
+        newProduct.updateThumbnail(googleStorageUtil.getGoogleStorageUrl(file));
+
         newProduct.updateCopyright(copyright);
         productRepository.save(newProduct);
         return;

@@ -28,7 +28,9 @@ public class Copyright extends BaseEntity {
     private User user;
 
     private String copyrightTitle;
+    @Column(columnDefinition = "LONGTEXT")
     private String privKey;
+    @Column(columnDefinition = "LONGTEXT")
     private String pubKey;
 
     public Copyright(String copyright_title, String priv_key, String pub_key){
@@ -47,5 +49,9 @@ public class Copyright extends BaseEntity {
 
     public void sellCopyright(User buyer) {
         this.user = buyer;
+    }
+
+    public void updateCopyrightId(String hash) {
+        this.copyrightId=hash;
     }
 }

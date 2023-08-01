@@ -14,7 +14,6 @@ public class RegistProductRequest {
     private String product_title;
     private String description;
     private String product_type;
-    private MultipartFile thumbnail;
     private int price;
     private String AI_type;
     private String seller_addr;

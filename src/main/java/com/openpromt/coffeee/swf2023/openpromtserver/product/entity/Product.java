@@ -39,11 +39,10 @@ public class Product extends BaseEntity {
     private String address;
     private Integer likes;
     private Integer price;
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
 
-    @Enumerated(EnumType.STRING)
-    private AIType AItype;
+    private String productType;
+
+    private String AItype;
 
     private boolean status;
 
@@ -54,30 +53,29 @@ public class Product extends BaseEntity {
                 .like(e.getLikes())
                 .username(e.copyrightId.getUser().getUsername())
                 .price(e.getPrice())
-                .AI_type(e.getAItype().getValue())
+                .AI_type(e.getAItype())
                 .build();
     }
     public static GetProductDetailResponse productToDetailResponse(Product e){
         return GetProductDetailResponse.builder()
-                .product_type(e.getProductType().getValue())
+                .product_type(e.getProductType())
                 .description(e.getDescription())
                 .price(e.getPrice())
                 .username(e.getCopyrightId().getUser().getUsername())
                 .title(e.getTitle())
                 .thumbnail(e.getThumbnail())
-                .AI_type(e.getAItype().getValue())
+                .AI_type(e.getAItype())
                 .build();
     }
 
     public static Product registProductRequestToProduct(RegistProductRequest request) throws IOException {
         return Product.builder()
                 .address(request.getSeller_addr())
-                .productType(ProductType.valueOf(request.getProduct_type()))
+                .productType(request.getProduct_type())
                 .title(request.getProduct_title())
                 .description(request.getDescription())
                 .price(request.getPrice())
-                .thumbnail(GoogleStorageUtil.getGoogleStorageUrl(request.getThumbnail())) // util 하나 작성
-                .AItype(AIType.valueOf(request.getAI_type()))
+                .AItype(request.getAI_type())
                 .build();
     }
 
@@ -87,5 +85,9 @@ public class Product extends BaseEntity {
 
     public void updateCopyright(Copyright copyright) {
         this.copyrightId = copyright;
+    }
+
+    public void updateThumbnail(String googleStorageUrl) {
+        this.thumbnail = googleStorageUrl;
     }
 }

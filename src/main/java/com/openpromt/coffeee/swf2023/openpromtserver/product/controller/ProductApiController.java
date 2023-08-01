@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -60,9 +61,9 @@ public class ProductApiController {
      */
 
     @PostMapping("/")
-    @ApiOperation(value = "사용권 구매", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
-    public void registProduct(@RequestBody RegistProductRequest request) throws IOException {
-        productService.registerProduct(request);
+    @ApiOperation(value = "Product 등록", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
+    public void registProduct(@RequestPart("thumbnail") MultipartFile file, @ModelAttribute  RegistProductRequest request)  throws IOException {
+        productService.registerProduct(request,file);
         return;
     }
 }
