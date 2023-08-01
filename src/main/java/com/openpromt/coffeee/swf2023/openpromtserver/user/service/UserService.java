@@ -42,11 +42,11 @@ public class UserService {
         if(!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword()))
             throw new BadCredentialsException("잘못된 계정정보입니다.");
 
-        Cookie cookie = new Cookie("Token", jwtProvider.createToken(user.getUsername(), user.getRole()));
-        cookie.setHttpOnly(true); // HttpOnly 속성 설정
-        cookie.setPath("/");
-        cookie.setDomain("localhost"); // 쿠키의 도메인 설정 (루트 도메인으로 설정)
-        httpServletResponse.addCookie(cookie);
+//        Cookie cookie = new Cookie("Token", jwtProvider.createToken(user.getUsername(), user.getRole()));
+//        cookie.setHttpOnly(true); // HttpOnly 속성 설정
+//        cookie.setPath("/");
+//        cookie.setDomain("localhost"); // 쿠키의 도메인 설정 (루트 도메인으로 설정)
+//        httpServletResponse.addCookie(cookie);
 
         return LoginResponseDto.builder()
                 .user_id(user.getUserId())
