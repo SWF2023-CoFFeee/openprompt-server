@@ -14,7 +14,7 @@ import static com.openpromt.coffeee.swf2023.openpromtserver.ipfs.util.JsonToFile
 @Service
 public class FileService {
 
-    public MultipartFile convertJsonToMultipartfile(Object request, String username){
+    public MultipartFile convertJsonToMultipartfile(Object request, String username) throws IOException {
         String filePath = username + ".json";
         System.out.println(filePath);
         File file = null;
@@ -24,7 +24,7 @@ public class FileService {
             return convertFileToMultipartFile(file);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new IOException(e);
         } finally {
             file.delete();
         }

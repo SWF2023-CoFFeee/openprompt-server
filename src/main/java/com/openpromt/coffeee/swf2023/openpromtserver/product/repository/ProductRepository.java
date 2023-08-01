@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-
     List<Product> findAllByProductType(String product_type);
 
     List<Product> findAllByCopyrightId(Copyright copyrightId);

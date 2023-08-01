@@ -4,6 +4,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.JoinRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.jaccard.Jaccard;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +50,11 @@ public class UserApiController {
     public String test(HttpServletRequest request, Principal principal){
         System.out.println(principal.getName());
         return request.getCookies()[0].getName();
+    }
+
+    @PostMapping("/test")
+    public Double testJakard(@RequestParam("string1")String string1, @RequestParam("string2")String string2){
+        double similarity = Jaccard.jaccardSimilarity(string1, string2);
+        return similarity;
     }
 }
