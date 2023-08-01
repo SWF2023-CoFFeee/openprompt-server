@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -34,5 +31,10 @@ public class CopyrightApiController {
     public RegisterCopyrightResponse registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException{
         copyrightService.registCopyright(request,principal.getName());
         return null;
+    }
+
+    @GetMapping("/")
+    public String getDecryptedPrompt(@RequestParam String contract_id){
+        return copyrightService.getDecryptedPrompt(contract_id);
     }
 }

@@ -44,11 +44,21 @@ public class CopyrightService {
         Optional<User> user = userRepository.findByUsername(username);
 
         Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
-        Long copyright_id = copyrightRepository.save(newCopyright).getCopyrightId();
+
 
         MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username);
         String hash = ipfsService.saveFile(multipartFile);
+        String copyright_id = copyrightRepository.save(newCopyright).getCopyrightId();
 
         return null;
+    }
+
+    /**
+     *  이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거
+     * @param contract_id
+     * @return
+     */
+    public String getDecryptedPrompt(String contract_id) {
+        return "";
     }
 }

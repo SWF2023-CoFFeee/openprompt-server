@@ -2,6 +2,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.product.controller;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductDetailResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductListResponse;
+import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.RegistProductRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -43,7 +45,7 @@ public class ProductApiController {
 
     @ApiOperation(value = "저작권 구매", notes = "product_id를 parameter로 입력받아 저작권 구매(cid 리턴)")
     @PatchMapping("/copyright")
-    public Long buyCopyright(Principal principal, @RequestParam Long product_id){
+    public String buyCopyright(Principal principal, @RequestParam Long product_id){
         return productService.buyCopyright(product_id,principal.getName());
     }
 
@@ -56,4 +58,11 @@ public class ProductApiController {
     /**
      * 사용권, 저작권 판매 등록 필요
      */
+
+    @PostMapping("/")
+    @ApiOperation(value = "사용권 구매", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
+    public void registProduct(@RequestBody RegistProductRequest request) throws IOException {
+        productService.registerProduct(request);
+        return;
+    }
 }

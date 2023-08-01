@@ -2,6 +2,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.user.controller;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.JoinRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginRequestDto;
+import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,8 +41,8 @@ public class UserApiController {
 
     @ApiOperation(value = "로그인", notes = "LoginRequestDto를 입력받아 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
-        return new ResponseEntity<>(userService.login(requestDto, httpServletResponse), HttpStatus.OK);
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
+        return new ResponseEntity<LoginResponseDto>(userService.login(requestDto, httpServletResponse), HttpStatus.OK);
     }
 
     @GetMapping("/test")

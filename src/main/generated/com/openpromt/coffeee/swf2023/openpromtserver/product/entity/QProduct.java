@@ -26,7 +26,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath address = createString("address");
 
-    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType> AIType = createEnum("AIType", com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType.class);
+    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType> AItype = createEnum("AItype", com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType.class);
 
     public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyrightId;
 

@@ -24,9 +24,9 @@ public class QCopyright extends EntityPathBase<Copyright> {
 
     public final com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.QBaseEntity _super = new com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.QBaseEntity(this);
 
-    public final StringPath copyright_title = createString("copyright_title");
+    public final StringPath copyrightId = createString("copyrightId");
 
-    public final NumberPath<Long> copyrightId = createNumber("copyrightId", Long.class);
+    public final StringPath copyrightTitle = createString("copyrightTitle");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CRE_DTTM = _super.CRE_DTTM;

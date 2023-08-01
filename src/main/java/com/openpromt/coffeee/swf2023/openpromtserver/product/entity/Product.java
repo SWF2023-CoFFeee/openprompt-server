@@ -3,17 +3,20 @@ package com.openpromt.coffeee.swf2023.openpromtserver.product.entity;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductDetailResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductListResponse;
+import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.RegistProductRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductTypeConverter;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.util.AITypeConverter;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseEntity;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.googlestorage.GoogleStorageUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.IOException;
 
 @Entity
 @Getter
@@ -40,7 +43,7 @@ public class Product extends BaseEntity {
     private ProductType productType;
 
     @Enumerated(EnumType.STRING)
-    private AIType AIType;
+    private AIType AItype;
 
     private boolean status;
 
@@ -51,7 +54,7 @@ public class Product extends BaseEntity {
                 .like(e.getLikes())
                 .username(e.copyrightId.getUser().getUsername())
                 .price(e.getPrice())
-                .AI_type(e.getAIType().getValue())
+                .AI_type(e.getAItype().getValue())
                 .build();
     }
     public static GetProductDetailResponse productToDetailResponse(Product e){
@@ -62,11 +65,27 @@ public class Product extends BaseEntity {
                 .username(e.getCopyrightId().getUser().getUsername())
                 .title(e.getTitle())
                 .thumbnail(e.getThumbnail())
-                .AI_type(e.getAIType().getValue())
+                .AI_type(e.getAItype().getValue())
+                .build();
+    }
+
+    public static Product registProductRequestToProduct(RegistProductRequest request) throws IOException {
+        return Product.builder()
+                .address(request.getSeller_addr())
+                .productType(ProductType.valueOf(request.getProduct_type()))
+                .title(request.getProduct_title())
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .thumbnail(GoogleStorageUtil.getGoogleStorageUrl(request.getThumbnail())) // util 하나 작성
+                .AItype(AIType.valueOf(request.getAI_type()))
                 .build();
     }
 
     public void cancelSellingProduct(){
         this.status=false;
+    }
+
+    public void updateCopyright(Copyright copyright) {
+        this.copyrightId = copyright;
     }
 }

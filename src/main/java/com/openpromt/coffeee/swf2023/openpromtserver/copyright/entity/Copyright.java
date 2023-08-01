@@ -21,21 +21,20 @@ import java.security.PublicKey;
 public class Copyright extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long copyrightId;
+    private String copyrightId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 
-    private String copyright_title;
+    private String copyrightTitle;
     private String privKey;
     private String pubKey;
 
     public Copyright(String copyright_title, String priv_key, String pub_key){
         this.privKey=priv_key;
         this.pubKey=pub_key;
-        this.copyright_title = copyright_title;
+        this.copyrightTitle = copyright_title;
     }
 
     public static Copyright getCopyrightByRequest(RegisterCopyrightRequest request,User user) throws NoSuchAlgorithmException {

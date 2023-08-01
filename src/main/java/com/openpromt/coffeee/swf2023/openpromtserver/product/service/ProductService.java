@@ -6,6 +6,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.repository.OwnTicketRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductDetailResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductListResponse;
+import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.RegistProductRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.repository.ProductRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -31,6 +33,8 @@ public class ProductService {
     private final UserRepository userRepository;
     private final OwnTicketRepository ownTicketRepository;
 
+
+
     public List<GetProductListResponse> getProductListByProductType(String product_type) {
         return productRepository.findAllByProductType(product_type).stream().map(Product::productToListResponse).collect(Collectors.toList());
     }
@@ -42,7 +46,7 @@ public class ProductService {
     }
 
 
-    public Long buyCopyright(Long product_id, String username) {
+    public String buyCopyright(Long product_id, String username) {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
         Copyright copyright = product.getCopyrightId();
         List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyrightId());
@@ -53,7 +57,7 @@ public class ProductService {
 
         User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
         copyright.sellCopyright(buyer);
-        Long copyright_id =copyrightRepository.save(copyright).getCopyrightId();
+        String copyright_id =copyrightRepository.save(copyright).getCopyrightId();
 
         /**
          * IPFS 갱신 코드 넣어주세요.
@@ -68,5 +72,13 @@ public class ProductService {
         User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
         ownTicketRepository.save(new OwnTicket(buyer, product.getCopyrightId()));
+    }
+
+    public void registerProduct(RegistProductRequest request) throws IOException {
+        Copyright copyright = copyrightRepository.findById(request.getCopyright_id()).orElseThrow(NoSuchElementException::new);
+        Product newProduct = Product.registProductRequestToProduct(request);
+        newProduct.updateCopyright(copyright);
+        productRepository.save(newProduct);
+        return;
     }
 }
