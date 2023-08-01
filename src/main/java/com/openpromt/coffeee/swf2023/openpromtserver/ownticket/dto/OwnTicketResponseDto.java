@@ -1,40 +1,26 @@
-package com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity;
+package com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.CopyRightResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
-import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
-import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Builder
-@Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OwnTicket {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OwnTicketResponseDto {
     private Long own_id;
-
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="userId")
     private User userId;
-
-    @OneToOne
-    @JoinColumn(name = "copyrightId")
-    private Copyright copyrightId;
-
-    public OwnTicket(User buyer, Copyright copyright_id) {
-        this.userId = buyer;
-        this.copyrightId = copyright_id;
-    }
+    private CopyRightResponseDto copyrightId;
 
     public static OwnTicketResponseDto convertToDto(OwnTicket ownTicket){
         return OwnTicketResponseDto.builder()
@@ -43,4 +29,10 @@ public class OwnTicket {
                 .copyrightId(Copyright.convertToDto(ownTicket.getCopyrightId()))
                 .build();
     }
+
+    public static List<OwnTicketResponseDto> convertToDtoList(List<OwnTicket> tickets){
+        Stream<OwnTicket> stream = tickets.stream();
+        return stream.map((ticket) -> convertToDto(ticket)).collect(Collectors.toList());
+    }
+
 }
