@@ -51,7 +51,7 @@ public class ProductService {
     public String buyCopyright(Long product_id, String username) {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
         Copyright copyright = product.getCopyrightId();
-        List<Product> productList = productRepository.findByCopyrightId(copyright.getCopyrightId());
+        List<Product> productList = productRepository.findAllByCopyrightId(copyright);
         for(Product p : productList){
             p.cancelSellingProduct();
             productRepository.save(product);
@@ -77,6 +77,7 @@ public class ProductService {
     }
 
     public void registerProduct(RegistProductRequest request, MultipartFile file) throws IOException {
+        System.out.println("asd"+request.getCopyright_id());
         Copyright copyright = copyrightRepository.findById(request.getCopyright_id()).orElseThrow(NoSuchElementException::new);
         Product newProduct = Product.registProductRequestToProduct(request);
 
