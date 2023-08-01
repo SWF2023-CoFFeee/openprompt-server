@@ -20,6 +20,7 @@ public class IpfsApiController {
 
     @PostMapping(value = "/upload")
     public String saveFile(@RequestParam("file")MultipartFile file){
+
         return ipfsService.saveFile(file);
     }
 

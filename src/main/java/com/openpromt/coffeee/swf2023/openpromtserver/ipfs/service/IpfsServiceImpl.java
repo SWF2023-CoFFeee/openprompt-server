@@ -35,7 +35,6 @@ public class IpfsServiceImpl implements IpfsService{
 
     @Override
     public byte[] loadFile(String hash) {
-
         try {
             IPFS ipfs = ipfsConfig.ipfs;
 

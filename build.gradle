@@ -59,6 +59,9 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     // IPFS
     implementation 'com.github.ipfs:java-ipfs-http-client:1.4.4'
+
+    // MockMultipartFile 사용위해 추가
+    implementation 'org.springframework:spring-test:5.3.9'
 }
 
 tasks.named('test') {

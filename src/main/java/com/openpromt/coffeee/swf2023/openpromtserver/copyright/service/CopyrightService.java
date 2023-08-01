@@ -38,12 +38,10 @@ public class CopyrightService {
         Optional<User> user = userRepository.findByUsername(username);
 
         Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
-
         Long copyright_id = copyrightRepository.save(newCopyright).getCopyrightId();
+
+
 
         return null;
     }
-
-
-
 }
