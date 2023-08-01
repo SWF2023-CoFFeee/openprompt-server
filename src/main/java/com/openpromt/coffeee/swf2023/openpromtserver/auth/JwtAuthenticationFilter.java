@@ -24,7 +24,7 @@ if(request.getCookies() != null && !request.getRequestURI().equals("/api/v2/user
             String accessToken = "";
 
             for(Cookie c : cookie)
-                if(c.getName().equals("access_token"))
+                if(c.getName().equals("Token"))
                     accessToken = c.getValue();
 
             if(accessToken == null || accessToken.length() == 0)

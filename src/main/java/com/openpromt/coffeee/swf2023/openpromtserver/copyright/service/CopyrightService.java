@@ -10,6 +10,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.DeserializationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -61,10 +63,18 @@ public class CopyrightService {
 
     /**
      *  이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거
-     * @param contract_id
+     * @param copyright_id
      * @return
      */
-    public String getDecryptedPrompt(String contract_id) {
-        return "";
+    public String getDecryptedPrompt(String copyright_id, String username) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, ClassNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        Copyright copyright = copyrightRepository.findById(copyright_id).orElseThrow(NoSuchElementException::new);
+        String base64PrivKey = copyright.getPrivKey();
+        PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
+
+        byte[] data = ipfsService.loadFile(copyright_id);
+
+        RegisterCopyrightRequest metadata = (RegisterCopyrightRequest)DeserializationUtil.deserialize(data);
+        String decryptedPrompt = RSAUtil.decryptRSA(metadata.getPrompt(),privateKey);
+        return decryptedPrompt;
     }
 }
