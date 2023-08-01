@@ -34,9 +34,7 @@ if(request.getCookies() != null && !request.getRequestURI().equals("/api/v2/user
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-
         }
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
         filterChain.doFilter(request, response);
     }
