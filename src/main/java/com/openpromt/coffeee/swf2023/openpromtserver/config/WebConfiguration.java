@@ -23,7 +23,6 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .allowedOrigins("http://localhost:3000")
-                .allowedOriginPatterns("*")
                 .allowedMethods("*")
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .maxAge(1800);
