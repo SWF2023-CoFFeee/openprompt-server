@@ -23,8 +23,9 @@ if(request.getHeader("Authorization") != null && !request.getRequestURI().equals
             String accessToken = "";
             String header = request.getHeader("Authorization");
             System.out.println("header : " + header);
-            String[] temp = accessToken.split(" ");
+            String[] temp = header.split(" ");
             accessToken = temp[1];
+            System.out.println(temp[1]);
             if(accessToken == null || accessToken.length() == 0)
                 response.setStatus(403);
             if(jwtProvider.validateToken(accessToken)){
