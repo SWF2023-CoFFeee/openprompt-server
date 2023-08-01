@@ -1,6 +1,7 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -33,5 +34,13 @@ public class OwnTicket {
     public OwnTicket(User buyer, Copyright copyright_id) {
         this.userId = buyer;
         this.copyrightId = copyright_id;
+    }
+
+    public static OwnTicketResponseDto convertToDto(OwnTicket ownTicket){
+        return OwnTicketResponseDto.builder()
+                .own_id(ownTicket.getOwn_id())
+                .userId(ownTicket.getUserId())
+                .copyrightId(Copyright.convertToDto(ownTicket.getCopyrightId()))
+                .build();
     }
 }

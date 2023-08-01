@@ -23,6 +23,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.security.*;
@@ -67,24 +68,24 @@ public class CopyrightService {
         return copyrightRepository.save(newCopyright).getCopyrightId();
     }
 
-    public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold){
+    public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, BadPaddingException, InvalidKeyException {
 
-        String newPrompt = request.getPrompt();
+        String newPrompt = request.getPrompt(); // 새로 추가하려는 프롬프트
         List<OwnTicketResponseDto> tickets = userService.getTicketsByUsername(username);
         List<RegisterCopyrightResponse> responses = null;
 
         for(int i=0; i<tickets.size(); i++){
-            String hashcode = tickets.get(i).getCopyrightId().getCopyrightId();
-            String existCopyrightName = tickets.get(i).getCopyrightId().getCopyrightTitle();
+            String hashcode = tickets.get(i).getCopyrightId().getCopyrightId(); // 가지고 있는 프롬프트의 IPFS 해시
+            String existCopyrightName = tickets.get(i).getCopyrightId().getCopyrightTitle(); // 가지고 있는 프롬프트의 이름
+            PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(tickets.get(i).getCopyrightId().getPrivKey());
 
             JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
-            String existPrompt = json.get("prompt").toString();
-
+            String encryptedPrompt = json.get("prompt").toString(); // 가지고 있는 프롬프트 (암호화된)
             /**
              * existPrompt 는 본래 암호화 되어 있기 때문에,
              * 이곳에 복호화 로직이 추가되어야한다.
              */
-
+            String existPrompt = RSAUtil.decryptRSA(encryptedPrompt, privateKey);
             double Similarity = Jaccard.jaccardSimilarity(newPrompt, existPrompt);
 
             if(Similarity > threshold){

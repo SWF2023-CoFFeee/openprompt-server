@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.CopyRightResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
@@ -19,13 +20,13 @@ import java.util.stream.Stream;
 public class OwnTicketResponseDto {
     private Long own_id;
     private User userId;
-    private Copyright copyrightId;
+    private CopyRightResponseDto copyrightId;
 
     public static OwnTicketResponseDto convertToDto(OwnTicket ownTicket){
         return OwnTicketResponseDto.builder()
                 .own_id(ownTicket.getOwn_id())
                 .userId(ownTicket.getUserId())
-                .copyrightId(ownTicket.getCopyrightId())
+                .copyrightId(Copyright.convertToDto(ownTicket.getCopyrightId()))
                 .build();
     }
 

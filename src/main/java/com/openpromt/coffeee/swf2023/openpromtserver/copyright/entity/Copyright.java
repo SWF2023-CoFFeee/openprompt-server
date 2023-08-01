@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.CopyRightResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
@@ -46,7 +47,6 @@ public class Copyright extends BaseEntity {
         this.user = user;
     }
 
-
     public void transferCopyright(User buyer, String hash){
         this.user = buyer;
         this.copyrightId=hash;
@@ -55,4 +55,16 @@ public class Copyright extends BaseEntity {
     public void updateCopyrightId(String hash) {
         this.copyrightId=hash;
     }
+
+    public static CopyRightResponseDto convertToDto(Copyright copyright){
+        return CopyRightResponseDto.builder()
+                .copyrightId(copyright.getCopyrightId())
+                .user(User.convertToDto(copyright.getUser()))
+                .ownTicket(OwnTicket.convertToDto(copyright.getOwnTicket()))
+                .copyrightTitle(copyright.getCopyrightTitle())
+                .privKey(copyright.getPrivKey())
+                .pubKey(copyright.getPubKey())
+                .build();
+    }
+
 }
