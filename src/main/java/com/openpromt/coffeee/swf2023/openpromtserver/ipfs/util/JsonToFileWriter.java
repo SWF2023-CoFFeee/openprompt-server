@@ -6,9 +6,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class JsonToFileWriter {
-    public static void writeJsonToFile(Object jsonObject, String filePath) throws IOException {
+    public static File writeJsonToFile(Object jsonObject, String filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(filePath);
         mapper.writeValue(file, jsonObject);
+        return file;
     }
 }

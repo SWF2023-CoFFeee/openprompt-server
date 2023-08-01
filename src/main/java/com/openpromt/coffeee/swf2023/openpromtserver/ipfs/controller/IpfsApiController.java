@@ -1,5 +1,7 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.ipfs.controller;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
+import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class IpfsApiController {
 
     private final IpfsService ipfsService;
+    private final FileService fileService;
 
     @PostMapping(value = "/upload")
     public String saveFile(@RequestParam("file")MultipartFile file){
@@ -30,5 +33,11 @@ public class IpfsApiController {
         httpHeaders.add("Content-Type", MediaType.ALL_VALUE);
         byte[] bytes = ipfsService.loadFile(hash);
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(bytes);
+    }
+
+    @PostMapping(value = "/test")
+    public String testSave(@RequestBody RegisterCopyrightRequest request){
+        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request);
+        return ipfsService.saveFile(multipartFile);
     }
 }
