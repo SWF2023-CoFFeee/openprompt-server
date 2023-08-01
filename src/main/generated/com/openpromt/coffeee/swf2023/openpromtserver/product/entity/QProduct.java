@@ -26,9 +26,9 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath address = createString("address");
 
-    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType> AI_type = createEnum("AI_type", com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType.class);
+    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType> AIType = createEnum("AIType", com.openpromt.coffeee.swf2023.openpromtserver.product.util.AIType.class);
 
-    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyright;
+    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyrightId;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> CRE_DTTM = _super.CRE_DTTM;
@@ -42,9 +42,9 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
-    public final NumberPath<Long> product_id = createNumber("product_id", Long.class);
+    public final NumberPath<Long> productId = createNumber("productId", Long.class);
 
-    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType> product_type = createEnum("product_type", com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType.class);
+    public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType> productType = createEnum("productType", com.openpromt.coffeee.swf2023.openpromtserver.product.util.ProductType.class);
 
     public final BooleanPath status = createBoolean("status");
 
@@ -76,7 +76,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.copyright = inits.isInitialized("copyright") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyright"), inits.get("copyright")) : null;
+        this.copyrightId = inits.isInitialized("copyrightId") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyrightId"), inits.get("copyrightId")) : null;
     }
 
 }

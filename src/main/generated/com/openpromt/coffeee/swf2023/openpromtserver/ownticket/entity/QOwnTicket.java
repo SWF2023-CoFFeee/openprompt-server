@@ -22,11 +22,11 @@ public class QOwnTicket extends EntityPathBase<OwnTicket> {
 
     public static final QOwnTicket ownTicket = new QOwnTicket("ownTicket");
 
-    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyright_id;
+    public final com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright copyrightId;
 
     public final NumberPath<Long> own_id = createNumber("own_id", Long.class);
 
-    public final com.openpromt.coffeee.swf2023.openpromtserver.user.entity.QUser user_id;
+    public final com.openpromt.coffeee.swf2023.openpromtserver.user.entity.QUser userId;
 
     public QOwnTicket(String variable) {
         this(OwnTicket.class, forVariable(variable), INITS);
@@ -46,8 +46,8 @@ public class QOwnTicket extends EntityPathBase<OwnTicket> {
 
     public QOwnTicket(Class<? extends OwnTicket> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.copyright_id = inits.isInitialized("copyright_id") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyright_id"), inits.get("copyright_id")) : null;
-        this.user_id = inits.isInitialized("user_id") ? new com.openpromt.coffeee.swf2023.openpromtserver.user.entity.QUser(forProperty("user_id")) : null;
+        this.copyrightId = inits.isInitialized("copyrightId") ? new com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.QCopyright(forProperty("copyrightId"), inits.get("copyrightId")) : null;
+        this.userId = inits.isInitialized("userId") ? new com.openpromt.coffeee.swf2023.openpromtserver.user.entity.QUser(forProperty("userId")) : null;
     }
 
 }
