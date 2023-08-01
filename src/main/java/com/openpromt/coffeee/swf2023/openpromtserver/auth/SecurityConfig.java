@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,5 +57,12 @@ public class SecurityConfig {
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer configure() throws Exception {
+        return (web) -> web.ignoring().antMatchers("/v2/api-docs/**")
+                .antMatchers("/swagger.json")
+                .antMatchers("/swagger-ui.html/**").antMatchers("/swagger-resources/**").antMatchers("/webjars/**");
     }
 }
