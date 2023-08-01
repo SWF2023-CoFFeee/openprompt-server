@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -27,6 +28,8 @@ public class QUser extends EntityPathBase<User> {
     public final StringPath password = createString("password");
 
     public final EnumPath<com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role> role = createEnum("role", com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role.class);
+
+    public final ListPath<com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket, com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.QOwnTicket> tickets = this.<com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket, com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.QOwnTicket>createList("tickets", com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket.class, com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.QOwnTicket.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> UPD_DTTM = _super.UPD_DTTM;

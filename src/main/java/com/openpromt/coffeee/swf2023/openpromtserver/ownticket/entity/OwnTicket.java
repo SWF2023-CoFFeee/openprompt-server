@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Entity
@@ -25,8 +26,8 @@ public class OwnTicket {
     @JoinColumn(name="userId")
     private User userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="copyrightId")
+    @OneToOne
+    @JoinColumn(name = "copyrightId")
     private Copyright copyrightId;
 
     public OwnTicket(User buyer, Copyright copyright_id) {

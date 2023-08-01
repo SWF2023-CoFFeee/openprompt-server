@@ -34,6 +34,8 @@ public class QCopyright extends EntityPathBase<Copyright> {
     //inherited
     public final NumberPath<Long> CRE_ID = _super.CRE_ID;
 
+    public final com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.QOwnTicket ownTicket;
+
     public final StringPath privKey = createString("privKey");
 
     public final StringPath pubKey = createString("pubKey");
@@ -64,6 +66,7 @@ public class QCopyright extends EntityPathBase<Copyright> {
 
     public QCopyright(Class<? extends Copyright> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.ownTicket = inits.isInitialized("ownTicket") ? new com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.QOwnTicket(forProperty("ownTicket"), inits.get("ownTicket")) : null;
         this.user = inits.isInitialized("user") ? new com.openpromt.coffeee.swf2023.openpromtserver.user.entity.QUser(forProperty("user")) : null;
     }
 

@@ -2,6 +2,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,17 @@ import java.security.PublicKey;
 @NoArgsConstructor
 public class Copyright extends BaseEntity {
 
+
     @Id
     private String copyrightId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "own_id")
+    private OwnTicket ownTicket;
 
     private String copyrightTitle;
     private String privKey;
