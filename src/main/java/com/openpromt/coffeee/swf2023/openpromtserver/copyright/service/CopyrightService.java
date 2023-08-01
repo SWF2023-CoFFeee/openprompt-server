@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
+
 public class CopyrightService {
     private final FileService fileService;
     private final IpfsService ipfsService;

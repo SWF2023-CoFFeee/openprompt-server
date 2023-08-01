@@ -19,10 +19,11 @@ public class WebConfiguration implements WebMvcConfigurer {
 //		Allow all headers.
 //		Set max age to 1800 seconds (30 minutes).
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+//                .allowedOriginPatterns("*")
                 .allowedHeaders("*")
 //                .allowCredentials(true)
-                .allowedMethods("*")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "OPTIONS")
+                .allowedOrigins("http://localhost:3000","*")
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .maxAge(1800);
 
@@ -31,15 +32,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/");
 
-        registry.addResourceHandler("/swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/swagger-ui/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/3.52.5/");
     }
 
 }

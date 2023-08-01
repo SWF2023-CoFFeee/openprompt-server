@@ -25,9 +25,8 @@ import java.util.List;
 
 
 @Slf4j
-@RequestMapping("/api/v2/product")
 @RequiredArgsConstructor
-@RestController
+@RestController()
 @Api("ProductApi : GetProductList, GetProductDetail, BuyCopyright, BuyTicket")
 public class ProductApiController {
 
@@ -35,25 +34,25 @@ public class ProductApiController {
     private final ProductService productService;
 
     @ApiOperation(value = "PLP", notes = "Product-type을 parameter로 받아 리스트 리턴")
-    @GetMapping("/")
-    public List<GetProductListResponse> getProductListByProductType(@RequestParam("product-type") String product_type){
+    @GetMapping("/product")
+    public List<GetProductListResponse> getProductListByProductType(@RequestParam String product_type){
 
        return productService.getProductListByProductType(product_type);
     }
 
     @ApiOperation(value = "PDP", notes = "ProductId를 Pathvariable로 입력받아 detail 리턴")
-    @GetMapping("/{productId}")
+    @GetMapping("/product/{productId}")
     public GetProductDetailResponse getProductDetail(@PathVariable("productId") Long product_id){
         return productService.getProductDetail(product_id);
     }
 
     @ApiOperation(value = "저작권 구매", notes = "product_id를 parameter로 입력받아 저작권 구매(cid 리턴)")
-    @PatchMapping("/copyright")
+    @PatchMapping("/product/copyright")
     public String buyCopyright(@RequestParam String username, @RequestParam Long product_id) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
         return productService.buyCopyright(product_id,username);
     }
 
-    @PostMapping("/ticket")
+    @PostMapping("/product/ticket")
     @ApiOperation(value = "사용권 구매", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
     public ResponseEntity<?> buyTicket(@RequestParam String username, @RequestParam Long product_id){
         productService.buyTicket(product_id,username);
@@ -63,7 +62,7 @@ public class ProductApiController {
      * 사용권, 저작권 판매 등록 필요
      */
 
-    @PostMapping("/")
+    @PostMapping("/product")
     @ApiOperation(value = "Product 등록", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
     public void registProduct(@RequestPart(name ="thumbnail",required=false) MultipartFile file, @ModelAttribute  RegistProductRequest request)  throws IOException {
         productService.registerProduct(request,file);

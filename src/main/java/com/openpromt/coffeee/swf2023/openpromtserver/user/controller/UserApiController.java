@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @Slf4j
-@RequestMapping("/api/v2/user")
 @RequiredArgsConstructor
 @Api("UserApi : Register, Login")
 @RestController
@@ -29,7 +28,7 @@ public class UserApiController {
     private final UserService userService;
 
     @ApiOperation(value = "회원가입", notes = "JoinRequestDto를 입력받아 회원가입")
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<?> register(@RequestBody JoinRequestDto joinRequestDto) throws JSONException {
 
         Long userid = userService.join(joinRequestDto);
@@ -41,7 +40,7 @@ public class UserApiController {
     }
 
     @ApiOperation(value = "로그인", notes = "LoginRequestDto를 입력받아 로그인")
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse) throws NoSuchFieldException {
         return new ResponseEntity<LoginResponseDto>(userService.login(requestDto, httpServletResponse), HttpStatus.OK);
     }

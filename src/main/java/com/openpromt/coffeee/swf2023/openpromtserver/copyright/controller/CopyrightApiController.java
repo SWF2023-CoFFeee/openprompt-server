@@ -22,22 +22,22 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 @Slf4j
-@RequestMapping("/api/v2/copyright")
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @Api("CopyrightApi: registeCopyright")
 public class CopyrightApiController {
     private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
     private final CopyrightService copyrightService;
 
-    @PostMapping("/")
+
+    @PostMapping("/copyright")
     @ApiOperation(value="저작권 등록", notes = "RegisterCopyrightRequest를 입력받아 프롬프트 암호화, IPFS metadata 전송 및 URI 받아옴")
     public ResponseEntity<?> registerCopyright(@RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
         copyrightService.registCopyright(request, request.getUsername());
         return ResponseEntity.ok(copyrightService.checkSimilarity(request.getUsername(), request, 60));
     }
 
-    @GetMapping("/")
+    @GetMapping("/copyright")
     public String getDecryptedPrompt(@RequestParam String copyright_id, @RequestParam String username) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
         return copyrightService.getDecryptedPrompt(copyright_id,username);
     }
