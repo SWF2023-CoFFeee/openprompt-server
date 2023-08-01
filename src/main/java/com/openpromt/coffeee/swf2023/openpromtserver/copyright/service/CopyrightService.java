@@ -57,14 +57,13 @@ public class CopyrightService {
         PublicKey publicKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
 
-        Copyright newCopyright = new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
+        Copyright newCopyright = new Copyright(request.getCopyright_title(), RSAUtil.getBase64PrivateKey(privateKey), RSAUtil.getBase64PublicKey(publicKey)); // 등록하려는 저작권 객체 생성
         String encryptPrompt = RSAUtil.encryptRSA(request.getPrompt(), publicKey);
-        request.setPrompt(encryptPrompt);
+        request.setPrompt(encryptPrompt); // 요청받은 prompt 부분 암호화
 
-        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username);
-        String hash = ipfsService.saveFile(multipartFile);
-        newCopyright.updateCopyrightId(hash);
-
+        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username); // 요청받은 request json을 Multipartfile로 변환
+        String hash = ipfsService.saveFile(multipartFile); // IPFS 네트워크에 등록 후 hash값 반환
+        newCopyright.updateCopyrightId(hash); // 등록하려는 저작권에 hash값 지정
 
         return copyrightRepository.save(newCopyright).getCopyrightId();
     }
