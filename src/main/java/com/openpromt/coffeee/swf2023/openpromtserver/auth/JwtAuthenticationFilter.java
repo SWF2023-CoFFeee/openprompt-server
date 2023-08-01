@@ -21,7 +21,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         if(request.getCookies() != null && (!request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login"))){
-            System.out.println(request.getCookies()[0].getValue());
             Cookie cookie[] = request.getCookies();
             String accessToken = "";
 
