@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class IpfsApiController {
     }
 
     @PostMapping(value = "/test")
-    public String testSave(@RequestBody RegisterCopyrightRequest request, Principal principal){
+    public String testSave(@RequestBody RegisterCopyrightRequest request, Principal principal) throws IOException {
         MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, principal.getName());
         return ipfsService.saveFile(multipartFile);
     }
