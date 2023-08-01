@@ -14,8 +14,9 @@ import static com.openpromt.coffeee.swf2023.openpromtserver.ipfs.util.JsonToFile
 @Service
 public class FileService {
 
-    public MultipartFile convertJsonToMultipartfile(Object request){
-        String filePath = "temp.json";
+    public MultipartFile convertJsonToMultipartfile(Object request, String username){
+        String filePath = username + ".json";
+        System.out.println(filePath);
         File file = null;
 
         try {

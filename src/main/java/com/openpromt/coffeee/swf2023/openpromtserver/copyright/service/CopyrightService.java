@@ -46,7 +46,7 @@ public class CopyrightService {
         Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
         Long copyright_id = copyrightRepository.save(newCopyright).getCopyrightId();
 
-        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request);
+        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username);
         String hash = ipfsService.saveFile(multipartFile);
 
         return null;

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
 @Slf4j
 @RequestMapping("/api/v2/ipfs")
 @RequiredArgsConstructor
@@ -36,8 +38,8 @@ public class IpfsApiController {
     }
 
     @PostMapping(value = "/test")
-    public String testSave(@RequestBody RegisterCopyrightRequest request){
-        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request);
+    public String testSave(@RequestBody RegisterCopyrightRequest request, Principal principal){
+        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, principal.getName());
         return ipfsService.saveFile(multipartFile);
     }
 }
