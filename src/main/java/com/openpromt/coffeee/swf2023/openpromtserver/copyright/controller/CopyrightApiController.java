@@ -2,7 +2,6 @@ package com.openpromt.coffeee.swf2023.openpromtserver.copyright.controller;
 
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
-import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.service.CopyrightService;
 import io.swagger.annotations.Api;

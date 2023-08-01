@@ -12,6 +12,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResp
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.jakard.Jakard;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -56,16 +57,43 @@ public class CopyrightService {
         return copyrightRepository.save(newCopyright).getCopyrightId();
     }
 
-    public int checkSimilarity(String username, RegisterCopyrightRequest request){
-        String prompt = request.getPrompt();
+    public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold){
+
+        String newPrompt = request.getPrompt();
         List<OwnTicketResponseDto> tickets = userService.getTicketsByUsername(username);
+        List<RegisterCopyrightResponse> responses = null;
+
         for(int i=0; i<tickets.size(); i++){
             String hashcode = tickets.get(i).getCopyrightId().getCopyrightId();
-            JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
+            String existCopyrightName = tickets.get(i).getCopyrightId().getCopyrightTitle();
 
-            json.get("prompt").toString();
+            JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
+            String existPrompt = json.get("prompt").toString();
+
+            /**
+             * existPrompt 는 본래 암호화 되어 있기 때문에,
+             * 이곳에 복호화 로직이 추가되어야한다.
+             */
+
+            int Similarity = Jakard.inspect(newPrompt, existPrompt);
+
+            if(Similarity > threshold){
+                // 유사도가 높아 등록불가한 사용권
+                responses.add(RegisterCopyrightResponse.builder()
+                        .copyright_name(existCopyrightName)
+                        .similarity(Similarity)
+                        .validate(false)
+                        .build());
+            }else{
+                // 유사도 검증에 문제가 없어 등록이 가능한 사용권
+                responses.add(RegisterCopyrightResponse.builder()
+                        .copyright_name(existCopyrightName)
+                        .similarity(Similarity)
+                        .validate(true)
+                        .build());
+            }
         }
-        return 0;
+        return responses;
     }
 
     /**
