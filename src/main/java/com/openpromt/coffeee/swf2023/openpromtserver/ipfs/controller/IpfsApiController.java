@@ -5,6 +5,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,5 +43,14 @@ public class IpfsApiController {
     public String testSave(@RequestBody RegisterCopyrightRequest request, Principal principal) throws IOException {
         MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, principal.getName());
         return ipfsService.saveFile(multipartFile);
+    }
+
+    @GetMapping(value = "/test/file/{hash}")
+    public JSONObject testFile(@PathVariable("hash") String hash){
+        byte[] bytes = ipfsService.loadFile(hash);
+        JSONObject json = new JSONObject(new String(bytes));
+        Object prompts = json.get("prompt");
+        String promptsString = prompts.toString();
+        return json;
     }
 }

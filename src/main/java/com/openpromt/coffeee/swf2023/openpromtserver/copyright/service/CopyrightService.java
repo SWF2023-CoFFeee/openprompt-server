@@ -8,9 +8,12 @@ import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.Copyri
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +22,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -27,6 +31,7 @@ import java.util.Optional;
 public class CopyrightService {
     private final FileService fileService;
     private final IpfsService ipfsService;
+    private final UserService userService;
     private final UserRepository userRepository;
     private final CopyrightRepository copyrightRepository;
 
@@ -49,6 +54,18 @@ public class CopyrightService {
         String hash = ipfsService.saveFile(multipartFile);
         newCopyright.updateCopyrightId(hash);
         return copyrightRepository.save(newCopyright).getCopyrightId();
+    }
+
+    public int checkSimilarity(String username, RegisterCopyrightRequest request){
+        String prompt = request.getPrompt();
+        List<OwnTicketResponseDto> tickets = userService.getTicketsByUsername(username);
+        for(int i=0; i<tickets.size(); i++){
+            String hashcode = tickets.get(i).getCopyrightId().getCopyrightId();
+            JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
+
+            json.get("prompt").toString();
+        }
+        return 0;
     }
 
     /**
