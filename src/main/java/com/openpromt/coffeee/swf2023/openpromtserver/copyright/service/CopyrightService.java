@@ -9,6 +9,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.service.OwnTicketService;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
@@ -35,7 +36,7 @@ import java.util.NoSuchElementException;
 public class CopyrightService {
     private final FileService fileService;
     private final IpfsService ipfsService;
-    private final UserService userService;
+    private final OwnTicketService ownTicketService;
     private final UserRepository userRepository;
     private final CopyrightRepository copyrightRepository;
 
@@ -74,7 +75,7 @@ public class CopyrightService {
     public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, BadPaddingException, InvalidKeyException {
 
         String newPrompt = request.getPrompt(); // 새로 추가하려는 프롬프트
-        List<OwnTicketResponseDto> tickets = userService.getTicketsByUsername(username);
+        List<OwnTicketResponseDto> tickets = ownTicketService.getTicketsByUsername(username);
         List<RegisterCopyrightResponse> responses = null;
 
         for(int i=0; i<tickets.size(); i++){
