@@ -39,10 +39,11 @@ public class Copyright extends BaseEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String pubKey;
 
-    public Copyright(String copyright_title, String priv_key, String pub_key){
+    public Copyright(String copyright_title, String priv_key, String pub_key, User user){
         this.privKey=priv_key;
         this.pubKey=pub_key;
         this.copyrightTitle = copyright_title;
+        this.user = user;
     }
 
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
+
 
 
 @Slf4j
@@ -41,13 +41,8 @@ public class UserApiController {
 
     @ApiOperation(value = "로그인", notes = "LoginRequestDto를 입력받아 로그인")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse) throws NoSuchFieldException {
         return new ResponseEntity<LoginResponseDto>(userService.login(requestDto, httpServletResponse), HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public String test(HttpServletRequest request, Principal principal){
-        System.out.println(principal.getName());
-        return request.getCookies()[0].getName();
-    }
 }

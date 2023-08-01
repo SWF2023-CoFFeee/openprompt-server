@@ -108,8 +108,8 @@ public class ProductService {
         System.out.println("asd"+request.getCopyright_id());
         Copyright copyright = copyrightRepository.findById(request.getCopyright_id()).orElseThrow(NoSuchElementException::new);
         Product newProduct = Product.registProductRequestToProduct(request);
-
-        newProduct.updateThumbnail(googleStorageUtil.getGoogleStorageUrl(file));
+        if(!(file ==null))
+            newProduct.updateThumbnail(googleStorageUtil.getGoogleStorageUrl(file));
 
         newProduct.updateCopyright(copyright);
         productRepository.save(newProduct);

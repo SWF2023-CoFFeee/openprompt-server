@@ -43,13 +43,13 @@ public class CopyrightService {
      * IPFS에 값을 저장하고, RegisterCopyrightReponse에 맞춰 값을 리턴시켜주세요.
      */
     public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        Optional<User> user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(()->new NoSuchElementException());
 
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
         PublicKey publicKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
 
-        Copyright newCopyright = new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
+        Copyright newCopyright = new Copyright(request.getCopyright_title(), RSAUtil.getBase64PrivateKey(privateKey),RSAUtil.getBase64PublicKey(publicKey),user );
         String encryptPrompt = RSAUtil.encryptRSA(request.getPrompt(), publicKey);
         request.setPrompt(encryptPrompt);
 
