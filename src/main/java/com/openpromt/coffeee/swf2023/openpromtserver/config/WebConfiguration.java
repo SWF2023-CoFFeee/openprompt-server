@@ -19,9 +19,9 @@ public class WebConfiguration implements WebMvcConfigurer {
 //		Allow all headers.
 //		Set max age to 1800 seconds (30 minutes).
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins("http://localhost:3000")
                 .allowedHeaders("*")
-                .allowedOriginPatterns("*")
+                .allowCredentials(true)
                 .allowedMethods("*")
 //			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .maxAge(1800);
