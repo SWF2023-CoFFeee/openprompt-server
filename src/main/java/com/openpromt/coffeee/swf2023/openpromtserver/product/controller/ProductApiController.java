@@ -8,16 +8,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 
@@ -46,7 +49,7 @@ public class ProductApiController {
 
     @ApiOperation(value = "저작권 구매", notes = "product_id를 parameter로 입력받아 저작권 구매(cid 리턴)")
     @PatchMapping("/copyright")
-    public String buyCopyright(Principal principal, @RequestParam Long product_id){
+    public String buyCopyright(Principal principal, @RequestParam Long product_id) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
         return productService.buyCopyright(product_id,principal.getName());
     }
 

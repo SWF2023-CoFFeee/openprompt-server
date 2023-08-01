@@ -14,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -40,14 +40,22 @@ public class CopyrightService {
      * Encrypt 이후, DB에 저장시키고 Copyright_id값 가져오는 것까지 작성해놓았습니다.
      * IPFS에 값을 저장하고, RegisterCopyrightReponse에 맞춰 값을 리턴시켜주세요.
      */
-    public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException{
+    public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         Optional<User> user = userRepository.findByUsername(username);
 
-        Copyright newCopyright = Copyright.getCopyrightByRequest(request,user.orElseThrow(NoSuchElementException::new));
+        KeyPair keyPair = RSAUtil.genRSAKeyPair();
+        PublicKey publicKey = keyPair.getPublic();
+        PrivateKey privateKey = keyPair.getPrivate();
+
+        Copyright newCopyright = new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
+        String encryptPrompt = RSAUtil.encryptRSA(request.getPrompt(), publicKey);
+        request.setPrompt(encryptPrompt);
 
         MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username);
         String hash = ipfsService.saveFile(multipartFile);
         newCopyright.updateCopyrightId(hash);
+
+
         return copyrightRepository.save(newCopyright).getCopyrightId();
     }
 

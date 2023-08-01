@@ -1,7 +1,11 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.product.service;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.CopyrightRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
+import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
+import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.repository.OwnTicketRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.dto.GetProductDetailResponse;
@@ -11,16 +15,22 @@ import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.repository.ProductRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.DeserializationUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.googlestorage.GoogleStorageUtil;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.httputil.HttpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -34,8 +44,12 @@ public class ProductService {
     private final CopyrightRepository copyrightRepository;
     private final UserRepository userRepository;
     private final OwnTicketRepository ownTicketRepository;
-
+    private final FileService fileService;
+    private final IpfsService ipfsService;
     private final GoogleStorageUtil googleStorageUtil;
+    private final HttpUtil httpUtil;
+
+    private final String ipfsBaseUrl = "https://ipfs.io/ipvs/";
 
     public List<GetProductListResponse> getProductListByProductType(String product_type) {
         return productRepository.findAllByProductType(product_type).stream().map(Product::productToListResponse).collect(Collectors.toList());
@@ -48,24 +62,38 @@ public class ProductService {
     }
 
 
-    public String buyCopyright(Long product_id, String username) {
+    public String buyCopyright(Long product_id, String buyer) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
         Product product = productRepository.findById(product_id).orElseThrow(NoSuchElementException::new);
         Copyright copyright = product.getCopyrightId();
+        String copyright_id = copyright.getCopyrightId();
+        User buyUser = userRepository.findByUsername(buyer).orElseThrow(NoSuchElementException::new);
         List<Product> productList = productRepository.findAllByCopyrightId(copyright);
+
         for(Product p : productList){
             p.cancelSellingProduct();
             productRepository.save(product);
         }
 
-        User buyer = userRepository.findByUsername(username).orElseThrow(NoSuchElementException::new);
-        copyright.sellCopyright(buyer);
-        String copyright_id =copyrightRepository.save(copyright).getCopyrightId();
+        RegisterCopyrightRequest data= (RegisterCopyrightRequest) DeserializationUtil.deserialize(ipfsService.loadFile(copyright_id));
+        String base64PrivKey = copyright.getPrivKey();
+        PrivateKey privKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
 
-        /**
-         * IPFS 갱신 코드 넣어주세요.
-         */
+        String plainText = RSAUtil.decryptRSA(data.getPrompt(),privKey);
 
-        return copyright_id;
+        KeyPair keyPair = RSAUtil.genRSAKeyPair();
+        PublicKey newPubKey = keyPair.getPublic();
+        PrivateKey newPrivKey = keyPair.getPrivate();
+
+        String newEncryptedPrompt = RSAUtil.encryptRSA(plainText, newPubKey);
+
+        data.setPrompt(newEncryptedPrompt);
+        MultipartFile file = fileService.convertJsonToMultipartfile(data,buyer);
+        String hash = ipfsService.saveFile(file);
+
+        copyright.transferCopyright(buyUser, hash);
+
+        return copyrightRepository.save(copyright).getCopyrightId();
+        // IPFS(productid로 cid갖고와) 에 요청해서 데이터 받고 datq 변환하고 decrypt 하고 plaintext 다시 암호화해서 IPFS에 재요청.
 
     }
 
