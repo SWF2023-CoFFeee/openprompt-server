@@ -33,6 +33,8 @@ if(request.getCookies() != null && !request.getRequestURI().equals("/api/v2/user
                 Authentication authentication = jwtProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
+
         }
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 
