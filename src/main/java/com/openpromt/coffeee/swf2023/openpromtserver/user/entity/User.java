@@ -1,25 +1,29 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.user.entity;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
+import com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseUserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
+import javax.persistence.*;
+
+@Builder
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long userId;
 
     private String username;
     private String password;
-    private String nickname;
-    private String product_list;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
