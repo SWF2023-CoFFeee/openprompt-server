@@ -12,12 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequestMapping("/api/v2/ipfs")
-
 @RequiredArgsConstructor
 @RestController
-public class IpfsController {
+public class IpfsApiController {
 
-    private IpfsService ipfsService;
+    private final IpfsService ipfsService;
 
     @PostMapping(value = "/upload")
     public String saveFile(@RequestParam("file")MultipartFile file){
