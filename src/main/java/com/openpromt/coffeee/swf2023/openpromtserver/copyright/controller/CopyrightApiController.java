@@ -2,8 +2,8 @@ package com.openpromt.coffeee.swf2023.openpromtserver.copyright.controller;
 
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
-import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.service.CopyrightService;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.jaccard.Jaccard;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +34,11 @@ public class CopyrightApiController {
     @GetMapping("/")
     public String getDecryptedPrompt(@RequestParam String contract_id){
         return copyrightService.getDecryptedPrompt(contract_id);
+    }
+
+    @PostMapping("/test")
+    public Double testJakard(@RequestParam("string1")String string1, @RequestParam("string2")String string2){
+        Double similarity = Jaccard.jaccardSimilarity(string1, string2);
+        return similarity;
     }
 }

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterCopyrightResponse {
     private String copyright_name;
-    private Integer similarity;
+    private Double similarity;
     private Boolean validate;
 }

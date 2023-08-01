@@ -5,24 +5,20 @@ import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyr
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.CopyrightRepository;
-import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.dto.OwnTicketResponseDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
-import com.openpromt.coffeee.swf2023.openpromtserver.util.jakard.Jakard;
+import com.openpromt.coffeee.swf2023.openpromtserver.util.jaccard.Jaccard;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -75,7 +71,7 @@ public class CopyrightService {
              * 이곳에 복호화 로직이 추가되어야한다.
              */
 
-            int Similarity = Jakard.inspect(newPrompt, existPrompt);
+            double Similarity = Jaccard.jaccardSimilarity(newPrompt, existPrompt);
 
             if(Similarity > threshold){
                 // 유사도가 높아 등록불가한 사용권
