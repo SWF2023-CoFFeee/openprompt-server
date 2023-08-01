@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class RegisterCopyrightRequest {
     private String prompt;
     private String AI_type;
+    private String username;
     private String copyright_title; // 저작권명
 }

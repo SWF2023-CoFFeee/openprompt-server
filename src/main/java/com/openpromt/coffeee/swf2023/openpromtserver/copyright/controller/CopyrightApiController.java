@@ -19,7 +19,6 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 
 @Slf4j
@@ -39,8 +38,8 @@ public class CopyrightApiController {
     }
 
     @GetMapping("/")
-    public String getDecryptedPrompt(@RequestParam String copyright_id, Principal principal) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
-        return copyrightService.getDecryptedPrompt(copyright_id,principal.getName());
+    public String getDecryptedPrompt(@RequestParam String copyright_id, @RequestParam String username) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
+        return copyrightService.getDecryptedPrompt(copyright_id,username);
     }
 
     @PostMapping("/test")

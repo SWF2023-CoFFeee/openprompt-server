@@ -38,9 +38,7 @@ public class SwaggerConfiguration {
 //                        basePackage("com.hanjan.user"))
                 .paths(PathSelectors.any())
                 .build()
-                .apiInfo(apiInfo())
-                .securitySchemes(securitySchemes())
-                .globalOperationParameters(globalOperationParameters());
+                .apiInfo(apiInfo());
     }
 
 
@@ -56,21 +54,5 @@ public class SwaggerConfiguration {
                 new ArrayList<>()
         );
     }
-    private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeyList = new ArrayList<>();
-        apiKeyList.add(new ApiKey("Cookie", "access_token", "header"));
-        return apiKeyList;
-    }
 
-    private List<Parameter> globalOperationParameters() {
-        Parameter jwtHeaderParameter = new ParameterBuilder()
-//                .name("Cookie")
-                .description("Access Token")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false)
-                .build();
-
-        return Arrays.asList(jwtHeaderParameter);
-    }
 }

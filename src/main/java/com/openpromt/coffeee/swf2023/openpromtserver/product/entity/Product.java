@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -37,8 +39,11 @@ public class Product extends BaseEntity {
     private String description;
     private String thumbnail;
     private String address;
-    private Integer likes;
-    private Integer price;
+
+    @ColumnDefault("0")
+    private int likes;
+
+    private int price;
 
     private String productType;
 

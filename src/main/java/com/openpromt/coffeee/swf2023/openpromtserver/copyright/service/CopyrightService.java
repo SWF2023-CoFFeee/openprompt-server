@@ -50,15 +50,14 @@ public class CopyrightService {
      * Encrypt 이후, DB에 저장시키고 Copyright_id값 가져오는 것까지 작성해놓았습니다.
      * IPFS에 값을 저장하고, RegisterCopyrightReponse에 맞춰 값을 리턴시켜주세요.
      */
-
     public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
-        Optional<User> user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(()->new NoSuchElementException());
 
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
         PublicKey publicKey = keyPair.getPublic();
         PrivateKey privateKey = keyPair.getPrivate();
 
-        Copyright newCopyright = new Copyright(request.getCopyright_title(), RSAUtil.getBase64PrivateKey(privateKey), RSAUtil.getBase64PublicKey(publicKey)); // 등록하려는 저작권 객체 생성
+        Copyright newCopyright = new Copyright(request.getCopyright_title(), RSAUtil.getBase64PrivateKey(privateKey),RSAUtil.getBase64PublicKey(publicKey),user );
         String encryptPrompt = RSAUtil.encryptRSA(request.getPrompt(), publicKey);
         request.setPrompt(encryptPrompt); // 요청받은 prompt 부분 암호화
 
