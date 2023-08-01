@@ -1,6 +1,7 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.user.entity;
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
+import com.openpromt.coffeee.swf2023.openpromtserver.ownticket.entity.OwnTicket;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.auditing.BaseUserEntity;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @Entity
@@ -26,4 +28,8 @@ public class User extends BaseUserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userId")
+    private List<OwnTicket> tickets;
+
 }
