@@ -3,6 +3,8 @@ package com.openpromt.coffeee.swf2023.openpromtserver.user.controller;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.JoinRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.dto.LoginRequestDto;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -18,11 +20,13 @@ import java.security.Principal;
 @Slf4j
 @RequestMapping("/api/v2/user")
 @RequiredArgsConstructor
+@Api("UserApi : Register, Login")
 @RestController
 public class UserApiController {
 
     private final UserService userService;
 
+    @ApiOperation(value = "회원가입", notes = "JoinRequestDto를 입력받아 회원가입")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody JoinRequestDto joinRequestDto) throws JSONException {
 
@@ -34,6 +38,7 @@ public class UserApiController {
         return ResponseEntity.ok(userid);
     }
 
+    @ApiOperation(value = "로그인", notes = "LoginRequestDto를 입력받아 로그인")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse httpServletResponse){
         return new ResponseEntity<>(userService.login(requestDto, httpServletResponse), HttpStatus.OK);
