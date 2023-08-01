@@ -13,7 +13,6 @@ import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.service.UserService;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.jaccard.Jaccard;
-import com.openpromt.coffeee.swf2023.openpromtserver.util.DeserializationUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -50,7 +48,7 @@ public class CopyrightService {
      * Encrypt 이후, DB에 저장시키고 Copyright_id값 가져오는 것까지 작성해놓았습니다.
      * IPFS에 값을 저장하고, RegisterCopyrightReponse에 맞춰 값을 리턴시켜주세요.
      */
-    public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+    public String registCopyright(RegisterCopyrightRequest request, String username) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException, InvalidKeySpecException {
         User user = userRepository.findByUsername(username).orElseThrow(()->new NoSuchElementException());
 
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
@@ -60,6 +58,10 @@ public class CopyrightService {
         Copyright newCopyright = new Copyright(request.getCopyright_title(), RSAUtil.getBase64PrivateKey(privateKey),RSAUtil.getBase64PublicKey(publicKey),user );
         String encryptPrompt = RSAUtil.encryptRSA(request.getPrompt(), publicKey);
         request.setPrompt(encryptPrompt); // 요청받은 prompt 부분 암호화
+        String s = RSAUtil.getBase64PrivateKey(privateKey);
+        PrivateKey p = RSAUtil.getPrivateKeyFromBase64Encrypted(s);
+
+        System.out.println(RSAUtil.decryptRSA(encryptPrompt,p));
 
         MultipartFile multipartFile = fileService.convertJsonToMultipartfile(request, username); // 요청받은 request json을 Multipartfile로 변환
         String hash = ipfsService.saveFile(multipartFile); // IPFS 네트워크에 등록 후 hash값 반환
@@ -119,8 +121,9 @@ public class CopyrightService {
 
         byte[] data = ipfsService.loadFile(copyright_id);
 
-        RegisterCopyrightRequest metadata = (RegisterCopyrightRequest)DeserializationUtil.deserialize(data);
-        String decryptedPrompt = RSAUtil.decryptRSA(metadata.getPrompt(),privateKey);
-        return decryptedPrompt;
+//        RegisterCopyrightRequest metadata = (RegisterCopyrightRequest)DeserializationUtil.deserialize(data);
+//        String decryptedPrompt = RSAUtil.decryptRSA(metadata.getPrompt(),privateKey);
+//        return decryptedPrompt;
+        return null;
     }
 }

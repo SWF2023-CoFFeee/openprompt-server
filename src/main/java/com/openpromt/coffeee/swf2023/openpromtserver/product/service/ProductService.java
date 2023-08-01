@@ -15,7 +15,6 @@ import com.openpromt.coffeee.swf2023.openpromtserver.product.entity.Product;
 import com.openpromt.coffeee.swf2023.openpromtserver.product.repository.ProductRepository;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.entity.User;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.repository.UserRepository;
-import com.openpromt.coffeee.swf2023.openpromtserver.util.DeserializationUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.googlestorage.GoogleStorageUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.httputil.HttpUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -74,23 +72,23 @@ public class ProductService {
             productRepository.save(product);
         }
 
-        RegisterCopyrightRequest data= (RegisterCopyrightRequest) DeserializationUtil.deserialize(ipfsService.loadFile(copyright_id));
+//        RegisterCopyrightRequest data= (RegisterCopyrightRequest) DeserializationUtil.deserialize(ipfsService.loadFile(copyright_id));
         String base64PrivKey = copyright.getPrivKey();
         PrivateKey privKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
 
-        String plainText = RSAUtil.decryptRSA(data.getPrompt(),privKey);
+//        String plainText = RSAUtil.decryptRSA(data.getPrompt(),privKey);
 
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
         PublicKey newPubKey = keyPair.getPublic();
         PrivateKey newPrivKey = keyPair.getPrivate();
 
-        String newEncryptedPrompt = RSAUtil.encryptRSA(plainText, newPubKey);
+//        String newEncryptedPrompt = RSAUtil.encryptRSA(plainText, newPubKey);
 
-        data.setPrompt(newEncryptedPrompt);
-        MultipartFile file = fileService.convertJsonToMultipartfile(data,buyer);
-        String hash = ipfsService.saveFile(file);
+//        data.setPrompt(newEncryptedPrompt);
+//        MultipartFile file = fileService.convertJsonToMultipartfile(data,buyer);
+//        String hash = ipfsService.saveFile(file);
 
-        copyright.transferCopyright(buyUser, hash);
+//        copyright.transferCopyright(buyUser, hash);
 
         return copyrightRepository.save(copyright).getCopyrightId();
         // IPFS(productid로 cid갖고와) 에 요청해서 데이터 받고 datq 변환하고 decrypt 하고 plaintext 다시 암호화해서 IPFS에 재요청.
