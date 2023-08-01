@@ -64,7 +64,7 @@ public class SwaggerConfiguration {
 
     private List<Parameter> globalOperationParameters() {
         Parameter jwtHeaderParameter = new ParameterBuilder()
-                .name("Cookie")
+//                .name("Cookie")
                 .description("Access Token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")

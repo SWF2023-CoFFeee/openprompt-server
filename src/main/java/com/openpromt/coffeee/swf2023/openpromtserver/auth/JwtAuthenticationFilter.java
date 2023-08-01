@@ -19,14 +19,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-if(request.getCookies() != null && !request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login")){
-            Cookie cookie[] = request.getCookies();
+if(request.getHeader("Authorization") != null && !request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login")){
             String accessToken = "";
-
-            for(Cookie c : cookie)
-                if(c.getName().equals("access_token"))
-                    accessToken = c.getValue();
-
+            String header = request.getHeader("Authorization");
+            System.out.println("header : " + header);
+            String[] temp = header.split(" ");
+            accessToken = temp[1];
+            System.out.println(temp[1]);
             if(accessToken == null || accessToken.length() == 0)
                 response.setStatus(403);
             if(jwtProvider.validateToken(accessToken)){
@@ -34,6 +33,7 @@ if(request.getCookies() != null && !request.getRequestURI().equals("/api/v2/user
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

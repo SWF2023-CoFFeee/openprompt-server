@@ -22,7 +22,7 @@ public class GoogleStorageUtil {
     private String bucketName;
 
     private static final String baseUrl = "https://storage.googleapis.com/coffeee/";
-    private static Storage storage;
+    private final Storage storage;
 
     public String getGoogleStorageUrl(MultipartFile file) throws IOException {
         String uuid = UUID.randomUUID().toString(); // GCS에 저장될 파일 이름

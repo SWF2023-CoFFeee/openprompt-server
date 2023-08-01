@@ -45,16 +45,10 @@ public class Copyright extends BaseEntity {
         this.copyrightTitle = copyright_title;
     }
 
-    public static Copyright getCopyrightByRequest(RegisterCopyrightRequest request,User user) throws NoSuchAlgorithmException {
-        KeyPair keyPair = RSAUtil.genRSAKeyPair();
-        PublicKey publicKey = keyPair.getPublic();
-        PrivateKey privateKey = keyPair.getPrivate();
 
-        return new Copyright(request.getCopyright_title(),RSAUtil.getBase64PublicKey(publicKey), RSAUtil.getBase64PrivateKey(privateKey));
-    }
-
-    public void sellCopyright(User buyer) {
+    public void transferCopyright(User buyer, String hash){
         this.user = buyer;
+        this.copyrightId=hash;
     }
 
     public void updateCopyrightId(String hash) {
