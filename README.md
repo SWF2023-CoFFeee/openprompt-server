@@ -61,7 +61,6 @@ Through this, we want to overcome the limitations of NFTs as well as the new Pro
 ## Service Video
 
 https://github.com/ABizCho/openprompt-client/assets/65459616/7969ac6e-4a02-41c0-b344-462936ccf82e
-PP_MAIN_SERVER_URL=${Server URL}
 
 
 
