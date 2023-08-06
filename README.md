@@ -68,5 +68,5 @@ https://github.com/ABizCho/openprompt-client/assets/65459616/7969ac6e-4a02-41c0-
 
 
 This project was created by the CoFFeee team at the [2023 Seoul Web 3.0 Festival](https://www.seoulweb3festival.com/):
+![해커톤](https://github.com/SWF2023-CoFFeee/openprompt-server/assets/89997300/c459c16a-e31b-40fb-8155-25d457ebaedf)
 
-<img src='https://github.com/SWF2023-CoFFeee/openprompt-client/assets/90181028/10559249-d872-4b24-b028-a0e09911711f'  >
