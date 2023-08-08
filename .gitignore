@@ -39,3 +39,7 @@ application-dev2.properties
 
 ### VS Code ###
 .vscode/
+
+
+*.pkcs12
+coffeee-394606-352eae38f9cf.json
