@@ -64,6 +64,11 @@ dependencies {
 
     // JSON Object
     implementation 'org.json:json:20200518'
+
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
