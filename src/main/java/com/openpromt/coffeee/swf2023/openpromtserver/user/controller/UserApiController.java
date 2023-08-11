@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class UserApiController {
     private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserApiController.class.getSimpleName());
     private static final String SET_COOKIE = "Set-Cookie";
+
+    @Value("${SERVER_DOMAIN}")
+    private final String DOMAIN;
 
     @ApiOperation(value = "회원가입", notes = "JoinRequestDto를 입력받아 회원가입")
     @PostMapping("/register")
@@ -54,7 +58,7 @@ public class UserApiController {
                 .sameSite("none")
                 .secure(true)
                 .path("/")
-                .domain("localhost")
+                .domain(DOMAIN)
                 .build();
         return ResponseEntity.ok().header(SET_COOKIE, cookie.toString()).body(loginResponseDto);
     }

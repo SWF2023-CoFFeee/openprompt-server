@@ -64,6 +64,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer configure() throws Exception {
         return (web) -> web.ignoring().antMatchers("/v2/api-docs/**")
                 .antMatchers("/swagger.json")
+                .antMatchers("/favicon.ico")
                 .antMatchers("/swagger-ui.html/**").antMatchers("/swagger-resources/**").antMatchers("/webjars/**");
     }
 }

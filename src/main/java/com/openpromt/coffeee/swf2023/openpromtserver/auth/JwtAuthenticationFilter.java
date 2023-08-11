@@ -21,26 +21,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if(request.getHeader("Authorization") != null && !request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login" )
-                && !request.getRequestURI().equals("/api/v2/user/test")){
+        logger.info(request.getRequestURI());
+        if(!request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login" ) && !request.getRequestURI().equals("/api/v2/user/test")){
 
-            System.out.println("in");
             String accessToken = "";
-            String header = request.getHeader("Authorization");
-            System.out.println("header : " + header);
-            String[] temp = header.split(" ");
-            accessToken = temp[1];
-            System.out.println(temp[1]);
+            Cookie cookies[] = request.getCookies();
+            for(Cookie c : cookies){
+                if(c.getName().equals("Token")){
+                    accessToken=c.getValue();
+                }
+            }
+
             if(accessToken == null || accessToken.length() == 0)
                 response.setStatus(403);
             if(jwtProvider.validateToken(accessToken)){
+                logger.debug("Valid AccessToken");
                 Authentication authentication = jwtProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-        }
-        if(request.getRequestURI().equals("/api/v2/user/test")){
-            System.out.println(request.getCookies()[0]);
         }
         System.out.println("out");
 

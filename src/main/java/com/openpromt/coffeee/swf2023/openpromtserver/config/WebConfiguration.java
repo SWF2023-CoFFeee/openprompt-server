@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -10,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
 
+    @Value("${SERVER_DOMAIN}")
+    private String DOMAIN;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 //		System.out.println("CORS Setting");
@@ -24,7 +27,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 //                .allowedOriginPatterns("*")
 //                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedOriginPatterns("http://localhost:3000","https://localhost:3000")
+                .allowedOriginPatterns("http://localhost:3000","https://localhost:3000","http://"+DOMAIN+":3000","https://"+DOMAIN+":3000")
 			    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .maxAge(1800);
 
