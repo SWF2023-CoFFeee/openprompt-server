@@ -35,12 +35,12 @@ public class UserApiController {
     private static final String SET_COOKIE = "Set-Cookie";
 
     @Value("${SERVER_DOMAIN}")
-    private final String DOMAIN;
+    private String DOMAIN;
 
     @ApiOperation(value = "회원가입", notes = "JoinRequestDto를 입력받아 회원가입")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody JoinRequestDto joinRequestDto) throws JSONException {
-
+        System.out.println("Asdasdasdsad");
         Long userid = userService.join(joinRequestDto);
 //        JSONObject json = new JSONObject();
 //        json.put("code", 200);
@@ -58,7 +58,7 @@ public class UserApiController {
                 .sameSite("none")
                 .secure(true)
                 .path("/")
-                .domain(DOMAIN)
+                .domain("localhost")
                 .build();
         return ResponseEntity.ok().header(SET_COOKIE, cookie.toString()).body(loginResponseDto);
     }

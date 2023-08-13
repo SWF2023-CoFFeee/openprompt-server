@@ -13,6 +13,6 @@ public class IpfsConfig {
     private String DOMAIN;
     public IPFS ipfs;
     public IpfsConfig(){
-        ipfs = new IPFS("/ip4/"+DOMAIN+"/tcp/5001");
+        ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
     }
 }
