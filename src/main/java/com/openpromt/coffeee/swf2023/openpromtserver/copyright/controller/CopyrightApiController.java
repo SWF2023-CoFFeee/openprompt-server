@@ -19,6 +19,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 
 @Slf4j
@@ -31,16 +32,16 @@ public class CopyrightApiController {
     private final CopyrightService copyrightService;
 
 
-    @PostMapping("/")
+    @PostMapping("")
     @ApiOperation(value="저작권 등록", notes = "RegisterCopyrightRequest를 입력받아 프롬프트 암호화, IPFS metadata 전송 및 URI 받아옴")
-    public ResponseEntity<?> registerCopyright(@RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
-        copyrightService.registCopyright(request, request.getUsername());
-        return ResponseEntity.ok(copyrightService.checkSimilarity(request.getUsername(), request, 60));
+    public ResponseEntity<?> registerCopyright(Principal principal, @RequestBody RegisterCopyrightRequest request) throws NoSuchAlgorithmException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
+        copyrightService.registCopyright(request, principal.getName());
+        return ResponseEntity.ok(copyrightService.checkSimilarity(principal.getName(), request, 60));
     }
 
-    @GetMapping("/")
-    public String getDecryptedPrompt(@RequestParam String copyright_id, @RequestParam String username) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
-        return copyrightService.getDecryptedPrompt(copyright_id,username);
+    @GetMapping("")
+    public String getDecryptedPrompt(Principal principal, @RequestParam String copyright_id) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
+        return copyrightService.getDecryptedPrompt(copyright_id,principal.getName());
     }
 
     @GetMapping("/test")

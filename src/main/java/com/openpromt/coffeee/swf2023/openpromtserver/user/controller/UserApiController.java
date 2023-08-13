@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 
 
 @Slf4j
@@ -67,6 +68,24 @@ public class UserApiController {
     public String test(@CookieValue("Token") String token, HttpServletRequest request){
         System.out.println(token);
         return null;
+    }
+
+    @ApiOperation(value = "로그아웃", notes = "현재 로그인된 사용자의 세션을 종료하고 쿠키를 삭제하여 로그아웃")
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse httpServletResponse) {
+        // 쿠키 삭제
+        ResponseCookie cookie = ResponseCookie.from("Token", "")
+                .httpOnly(true)
+                .sameSite("none")
+                .secure(true)
+                .path("/")
+                .domain("localhost")
+                .maxAge(0)
+                .build();
+
+        httpServletResponse.addHeader(SET_COOKIE, cookie.toString());
+
+        return ResponseEntity.ok().build();
     }
 //
 //    @PostMapping("/test")

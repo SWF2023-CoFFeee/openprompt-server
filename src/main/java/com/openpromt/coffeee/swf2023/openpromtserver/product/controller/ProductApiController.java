@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ProductApiController {
     private final ProductService productService;
 
     @ApiOperation(value = "PLP", notes = "Product-type을 parameter로 받아 리스트 리턴")
-    @GetMapping("/")
+    @GetMapping("")
     public List<GetProductListResponse> getProductListByProductType(@RequestParam String product_type){
 
        return productService.getProductListByProductType(product_type);
@@ -49,21 +50,21 @@ public class ProductApiController {
 
     @ApiOperation(value = "저작권 구매", notes = "product_id를 parameter로 입력받아 저작권 구매(cid 리턴)")
     @PatchMapping("/copyright")
-    public String buyCopyright(@RequestParam String username, @RequestParam Long product_id) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
-        return productService.buyCopyright(product_id,username);
+    public String buyCopyright(Principal principal, @RequestParam Long product_id) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
+        return productService.buyCopyright(product_id,principal.getName());
     }
 
     @PostMapping("/ticket")
     @ApiOperation(value = "사용권 구매", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
-    public ResponseEntity<?> buyTicket(@RequestParam String username, @RequestParam Long product_id){
-        productService.buyTicket(product_id,username);
+    public ResponseEntity<?> buyTicket(Principal principal, @RequestParam Long product_id){
+        productService.buyTicket(product_id,principal.getName());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     /**
      * 사용권, 저작권 판매 등록 필요
      */
 
-    @PostMapping("/")
+    @PostMapping("")
     @ApiOperation(value = "Product 등록", notes = "product_id를 parameter로 입력받아 사용권 구매(리턴 x)")
     public void registProduct(@RequestPart(name ="thumbnail",required=false) MultipartFile file, @ModelAttribute  RegistProductRequest request)  throws IOException {
         productService.registerProduct(request,file);
