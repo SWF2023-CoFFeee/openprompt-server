@@ -2,7 +2,7 @@
 
 ![logo](https://github.com/SWF2023-CoFFeee/openprompt-client/assets/90181028/e3f51cb5-570b-47db-8f7f-43296acfa890)
 
-# OpenPrompt
+# OpenPrompt-server
 
 </div>
 
@@ -61,19 +61,40 @@ https://github.com/ABizCho/openprompt-client/assets/65459616/7969ac6e-4a02-41c0-
 
 ## Getting started
 
-```
-./gradlew bootRun
+#### 1. Prerequisites: Start MySQL Database
 
-```
+For macOS:
+
+1. Start MySQL Service
 
 ```
 brew services start mysql
+```
+
+2. Connect to MySQL Databaseß
+
+```
 mysql -u root -p
 ```
 
+For Windows:
+
+1. Press `Windows + R` to open the Run dialog box.
+2. Type services.msc and press Enter or click OK.
+3. In the Services window, scroll down and find MySQL or MySQLXX (where XX is the version number).
+4. Right-click on it and choose Start.
+
+#### 2. Prerequisites: Start IPFS
+
+To get started with IPFS, you need to install it first. Follow the installation guide provided on the [IPFS official website](https://ipfs.tech/#install). Once installed, start the IPFS service.
+
+#### 3. Run the Project
+
 ```
-https://localhost:8081/swagger-ui.html
+./gradlew bootRun
 ```
+
+And then, you can view the [API specifications](https://localhost:8081/swagger-ui.html) of the application and directly test API requests.
 
 ## Team
 
