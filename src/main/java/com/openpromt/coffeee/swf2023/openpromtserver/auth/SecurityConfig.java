@@ -3,6 +3,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +44,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .httpBasic().disable()
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().requiresChannel().anyRequest().requiresSecure()
@@ -47,7 +53,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/v2/user/**", "/api/v2/ipfs/**")
                 .permitAll()
-                .antMatchers("/api/v2/**")
+                .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll()
+                .antMatchers("/api/v2/copyright/**","/api/v2/product/**")
+//                .permitAll()
                 .hasRole("USER")
                 .anyRequest()
                 .denyAll()
@@ -67,4 +75,17 @@ public class SecurityConfig {
                 .antMatchers("/favicon.ico")
                 .antMatchers("/swagger-ui.html/**").antMatchers("/swagger-resources/**").antMatchers("/webjars/**");
     }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.addAllowedOrigin("https://localhost:3000");
+//        configuration.addAllowedHeader("*");
+//        configuration.addAllowedMethod("*");
+//        configuration.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }

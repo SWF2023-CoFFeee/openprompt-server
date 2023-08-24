@@ -1,5 +1,6 @@
 package com.openpromt.coffeee.swf2023.openpromtserver.auth;
 
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.controller.CopyrightApiController;
 import com.openpromt.coffeee.swf2023.openpromtserver.user.util.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -8,6 +9,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +30,8 @@ public class JwtProvider {
 
     @Value("${jwt.secret.key}")
     private String salt;
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class.getSimpleName());
 
     private Key secretKey;
     private final long exp = 1000L * 60 * 60; // 만료시간: 1h
@@ -54,6 +59,7 @@ public class JwtProvider {
     // Spring Security 인증과정에서 권한확인을 위한 기능
     public Authentication getAuthentication(String token){
         UserDetails userDetails = principalDetailsService.loadUserByUsername(this.getAccount(token));
+        logger.debug("Authentication : " + userDetails.getAuthorities());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

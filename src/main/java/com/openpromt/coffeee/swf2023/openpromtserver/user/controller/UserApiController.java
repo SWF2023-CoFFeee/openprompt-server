@@ -58,7 +58,7 @@ public class UserApiController {
                 .httpOnly(true)
                 .sameSite("none")
                 .secure(true)
-                .path("/")
+                .path("/api/v2")
                 .domain("localhost")
                 .build();
         return ResponseEntity.ok().header(SET_COOKIE, cookie.toString()).body(loginResponseDto);

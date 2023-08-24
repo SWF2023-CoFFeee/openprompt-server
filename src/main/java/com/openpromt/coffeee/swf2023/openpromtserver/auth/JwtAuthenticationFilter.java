@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -20,27 +21,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         logger.info(request.getRequestURI());
-        if(!request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login" ) && !request.getRequestURI().equals("/api/v2/user/test")){
+        logger.info(request.getMethod());
+        if(!request.getMethod().equals("OPTIONS")) {
+            Optional<Cookie[]> co = Optional.ofNullable(request.getCookies());
+            if (co.isEmpty()) {
+                logger.info("cookie null");
 
-            String accessToken = "";
-            Cookie cookies[] = request.getCookies();
-            for(Cookie c : cookies){
-                if(c.getName().equals("Token")){
-                    accessToken=c.getValue();
+            } else {
+                logger.info("cookie exist");
+            }
+            if (!request.getRequestURI().equals("/api/v2/user/register") && !request.getRequestURI().equals("/api/v2/user/login") && !request.getRequestURI().equals("/api/v2/user/test")) {
+
+                String accessToken = "";
+                Cookie cookies[] = request.getCookies();
+
+                logger.info(request.getCookies());
+                for (Cookie c : cookies) {
+                    if (c.getName().equals("Token")) {
+                        accessToken = c.getValue();
+                    }
                 }
-            }
 
-            if(accessToken == null || accessToken.length() == 0)
-                response.setStatus(403);
-            if(jwtProvider.validateToken(accessToken)){
-                logger.info("Valid AccessToken");
-                logger.info(accessToken);
-                Authentication authentication = jwtProvider.getAuthentication(accessToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+                if (accessToken == null || accessToken.length() == 0)
+                    response.setStatus(403);
+                if (jwtProvider.validateToken(accessToken)) {
+                    logger.info("Valid AccessToken");
+                    logger.info(accessToken);
+                    Authentication authentication = jwtProvider.getAuthentication(accessToken);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
 
+            }
         }
         System.out.println("out");
 

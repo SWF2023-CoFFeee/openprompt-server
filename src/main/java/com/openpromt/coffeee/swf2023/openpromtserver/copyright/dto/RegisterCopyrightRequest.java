@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterCopyrightRequest {
     private String prompt;
-    private String AI_type;
+    private String ai_type;
     private String copyright_title; // 저작권명
 }
