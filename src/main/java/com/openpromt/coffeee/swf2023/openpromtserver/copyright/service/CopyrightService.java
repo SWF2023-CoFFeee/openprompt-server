@@ -72,24 +72,26 @@ public class CopyrightService {
         return copyrightRepository.save(newCopyright).getCopyrightId();
     }
 
-    public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, BadPaddingException, InvalidKeyException {
+    public List<RegisterCopyrightResponse> checkSimilarity(String username, RegisterCopyrightRequest request, int threshold) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, IOException, BadPaddingException, InvalidKeyException, ClassNotFoundException {
 
         String newPrompt = request.getPrompt(); // 새로 추가하려는 프롬프트
         List<OwnTicketResponseDto> tickets = ownTicketService.getTicketsByUsername(username);
         List<RegisterCopyrightResponse> responses = null;
 
         for(int i=0; i<tickets.size(); i++){
-            String hashcode = tickets.get(i).getCopyrightId().getCopyrightId(); // 가지고 있는 프롬프트의 IPFS 해시
-            String existCopyrightName = tickets.get(i).getCopyrightId().getCopyrightTitle(); // 가지고 있는 프롬프트의 이름
-            PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(tickets.get(i).getCopyrightId().getPrivKey());
+//            String hashcode = tickets.get(i).getCopyrightId().getCopyrightId(); // 가지고 있는 프롬프트의 IPFS 해시
 
-            JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
-            String encryptedPrompt = json.get("prompt").toString(); // 가지고 있는 프롬프트 (암호화된)
+//            PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(tickets.get(i).getCopyrightId().getPrivKey());
+//
+//            JSONObject json = new JSONObject(new String(ipfsService.loadFile(hashcode)));
+//            String encryptedPrompt = json.get("prompt").toString(); // 가지고 있는 프롬프트 (암호화된)
             /**
              * existPrompt 는 본래 암호화 되어 있기 때문에,
              * 이곳에 복호화 로직이 추가되어야한다.
              */
-            String existPrompt = RSAUtil.decryptRSA(encryptedPrompt, privateKey);
+            String existCopyrightName = tickets.get(i).getCopyrightId().getCopyrightTitle(); // 가지고 있는 프롬프트의 이름
+            String existPrompt = getDecryptedPrompt(existCopyrightName,username);
+
             double Similarity = Jaccard.jaccardSimilarity(newPrompt, existPrompt);
 
             if(Similarity > threshold){
@@ -112,8 +114,9 @@ public class CopyrightService {
     }
 
     /**
-     *  이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거이거
+     *
      * @param copyright_id
+     * @param username
      * @return
      */
     public String getDecryptedPrompt(String copyright_id, String username) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, ClassNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
@@ -121,11 +124,11 @@ public class CopyrightService {
         String base64PrivKey = copyright.getPrivKey();
         PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
 
-        byte[] data = ipfsService.loadFile(copyright_id);
+        JSONObject json = new JSONObject(new String(ipfsService.loadFile(copyright.getCopyrightId())));
+        String encryptedPrompt = json.get("prompt").toString();
 
-//        RegisterCopyrightRequest metadata = (RegisterCopyrightRequest)DeserializationUtil.deserialize(data);
-//        String decryptedPrompt = RSAUtil.decryptRSA(metadata.getPrompt(),privateKey);
-//        return decryptedPrompt;
-        return null;
+        String decryptedPrompt = RSAUtil.decryptRSA(encryptedPrompt,privateKey);
+
+        return decryptedPrompt;
     }
 }

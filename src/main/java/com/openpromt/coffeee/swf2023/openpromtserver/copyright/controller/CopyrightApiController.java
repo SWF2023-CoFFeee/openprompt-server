@@ -2,6 +2,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.copyright.controller;
 
 
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightResponse;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.service.CopyrightService;
 import com.openpromt.coffeee.swf2023.openpromtserver.util.jaccard.Jaccard;
 import io.swagger.annotations.Api;
@@ -10,17 +11,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,13 +37,20 @@ import java.security.spec.InvalidKeySpecException;
 public class CopyrightApiController {
     private static final Logger logger = LoggerFactory.getLogger(CopyrightApiController.class.getSimpleName());
     private final CopyrightService copyrightService;
-
-
+    private final HttpSession session;
     @PostMapping("/register")
     @ApiOperation(value="저작권 등록", notes = "RegisterCopyrightRequest를 입력받아 프롬프트 암호화, IPFS metadata 전송 및 URI 받아옴")
-    public ResponseEntity<?> registerCopyright(Principal principal, @RequestBody(required=false) RegisterCopyrightRequest request) throws NoSuchAlgorithmException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
+    public ResponseEntity<?> registerCopyright(Principal principal, @RequestBody(required=false) RegisterCopyrightRequest request) throws NoSuchAlgorithmException, IOException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException, ClassNotFoundException {
+        List<RegisterCopyrightResponse> response = copyrightService.checkSimilarity(principal.getName(), request, 60);
+        for(RegisterCopyrightResponse res : response){
+            if(!res.getValidate()){
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("Error","Not Allowed Prompt");
+                return new ResponseEntity<>(response, headers,403);
+            }
+        }
         copyrightService.registCopyright(request, principal.getName());
-        return ResponseEntity.ok(copyrightService.checkSimilarity(principal.getName(), request, 60));
+        return ResponseEntity.ok(response);
     }
 
 

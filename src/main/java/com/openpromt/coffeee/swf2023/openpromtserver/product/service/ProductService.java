@@ -3,6 +3,7 @@ package com.openpromt.coffeee.swf2023.openpromtserver.product.service;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.dto.RegisterCopyrightRequest;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.entity.Copyright;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.repository.CopyrightRepository;
+import com.openpromt.coffeee.swf2023.openpromtserver.copyright.service.CopyrightService;
 import com.openpromt.coffeee.swf2023.openpromtserver.copyright.util.RSAUtil;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.FileService;
 import com.openpromt.coffeee.swf2023.openpromtserver.ipfs.service.IpfsService;
@@ -19,6 +20,7 @@ import com.openpromt.coffeee.swf2023.openpromtserver.util.googlestorage.GoogleSt
 import com.openpromt.coffeee.swf2023.openpromtserver.util.httputil.HttpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,26 +74,29 @@ public class ProductService {
             productRepository.save(product);
         }
 
-//        RegisterCopyrightRequest data= (RegisterCopyrightRequest) DeserializationUtil.deserialize(ipfsService.loadFile(copyright_id));
-        String base64PrivKey = copyright.getPrivKey();
-        PrivateKey privKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
+        JSONObject json = new JSONObject(new String(ipfsService.loadFile(copyright.getCopyrightId())));
+        String encryptedPrompt = json.get("prompt").toString();
+        String ai_type = json.get("ai_type").toString();
+        String copyright_title = json.get("copyright_title").toString();
 
-//        String plainText = RSAUtil.decryptRSA(data.getPrompt(),privKey);
+        String base64PrivKey = copyright.getPrivKey();
+        PrivateKey privateKey = RSAUtil.getPrivateKeyFromBase64Encrypted(base64PrivKey);
+        String plainText = RSAUtil.decryptRSA(encryptedPrompt,privateKey);
+
+        // IPFS(productid로 cid갖고와) 에 요청해서 데이터 받고 datq 변환하고 decrypt 하고 plaintext 다시 암호화해서 IPFS에 재요청.
 
         KeyPair keyPair = RSAUtil.genRSAKeyPair();
         PublicKey newPubKey = keyPair.getPublic();
         PrivateKey newPrivKey = keyPair.getPrivate();
 
-//        String newEncryptedPrompt = RSAUtil.encryptRSA(plainText, newPubKey);
+        String newEncryptedPrompt = RSAUtil.encryptRSA(plainText, newPubKey);
 
-//        data.setPrompt(newEncryptedPrompt);
-//        MultipartFile file = fileService.convertJsonToMultipartfile(data,buyer);
-//        String hash = ipfsService.saveFile(file);
+        MultipartFile multipartFile = fileService.convertJsonToMultipartfile(new RegisterCopyrightRequest(newEncryptedPrompt, ai_type,copyright_title), buyer); // 요청받은 request json을 Multipartfile로 변환
+        String hash = ipfsService.saveFile(multipartFile); // IPFS 네트워크에 등록 후 hash값 반환
 
-//        copyright.transferCopyright(buyUser, hash);
+        copyright.transferCopyright(buyUser, hash);
 
         return copyrightRepository.save(copyright).getCopyrightId();
-        // IPFS(productid로 cid갖고와) 에 요청해서 데이터 받고 datq 변환하고 decrypt 하고 plaintext 다시 암호화해서 IPFS에 재요청.
 
     }
 
@@ -113,4 +118,5 @@ public class ProductService {
         productRepository.save(newProduct);
         return;
     }
+
 }
